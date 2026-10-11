@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+# fetched/generated on demand by the build (idempotent), never committed
+fonts/
+.cache/
+out/

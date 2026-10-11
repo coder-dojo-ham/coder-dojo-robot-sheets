@@ -1,0 +1,107 @@
+"""Syntax-highlighted code blocks with 'changed line' highlights and callout notes.
+
+Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **-0.7**"}:
+  hl    comma separated 1-based lines to tint (the lines the kid should change/add)
+  note  ';'-separated "line|token|label": boxes `token` on that line and hangs a label off it
+"""
+import html
+import re
+
+from pygments.lexers import get_lexer_by_name
+from pygments.token import Comment, Keyword, Name, Number, String
+
+ATTR = re.compile(r'(\w+)="([^"]*)"')
+FONT_PT = 13  # keep in step with .code font-size in page.py
+ADVANCE = 0.5  # Inconsolata glyph advance in em, so line width is known without measuring
+
+
+def parse_attrs(info):
+    return dict(ATTR.findall(info))
+
+
+def _css_class(ttype):
+    # Mirrors the Thonny look the old sheets used: bold keywords, bold def names, orange numbers.
+    if ttype in Keyword:
+        return "kw"
+    if ttype in Name.Function or ttype in Name.Class:
+        return "fn"
+    if ttype in Number:
+        return "num"
+    if ttype in Comment:
+        return "cm"
+    if ttype in String:
+        return "st"
+    return ""
+
+
+def _split_lines(code, lang):
+    """-> list of lines, each a list of [css_class, text] runs."""
+    lexer = get_lexer_by_name(lang or "text")
+    lines = [[]]
+    for ttype, value in lexer.get_tokens(code):
+        cls = _css_class(ttype)
+        parts = value.split("\n")
+        for i, part in enumerate(parts):
+            if i:
+                lines.append([])
+            if part:
+                lines[-1].append([cls, part])
+    if lines and not lines[-1]:
+        lines.pop()  # the lexer's trailing newline
+    return lines
+
+
+def _mark(runs, token):
+    """Split runs so `token` is its own run flagged for boxing. Returns True if found."""
+    text = "".join(t for _, t in runs)
+    start = text.find(token)
+    if start < 0:
+        return False
+    end, pos, out = start + len(token), 0, []
+    for cls, t in runs:
+        a, b = pos, pos + len(t)
+        pos = b
+        if b <= start or a >= end:
+            out.append([cls, t])
+            continue
+        if a < start:
+            out.append([cls, t[:start - a]])
+        out.append([cls + " mark", t[max(start, a) - a:min(end, b) - a]])
+        if b > end:
+            out.append([cls, t[end - a:]])
+    runs[:] = out
+    return True
+
+
+def _runs_html(runs):
+    return "".join(
+        f'<span class="{c}">{html.escape(t)}</span>' if c else html.escape(t) for c, t in runs)
+
+
+def render_code(code, lang, info="", inline=lambda s: s):
+    """`inline` renders a markdown inline string (for note labels) to HTML."""
+    attrs = parse_attrs(info)
+    lines = _split_lines(code.rstrip("\n"), lang)
+    hl = {int(n) for n in attrs.get("hl", "").split(",") if n.strip()}
+    notes = {}
+    for spec in filter(None, attrs.get("note", "").split(";")):
+        no, token, label = spec.split("|", 2)
+        no = int(no)
+        if not _mark(lines[no - 1], token):
+            raise ValueError(f"note token {token!r} not on line {no}: {lines[no - 1]}")
+        notes[no] = label
+
+    widest = max(len("".join(t for _, t in runs)) for runs in lines)
+    rows = []
+    for n, runs in enumerate(lines, 1):
+        cls = "ln hl" if n in hl else "ln"
+        note = ""
+        if n in notes:
+            # leader runs from the end of this line's text to the label, which sits past the block
+            gap_pt = (widest - len("".join(t for _, t in runs))) * FONT_PT * ADVANCE
+            note = (f'<span class="note">'
+                    f'<span class="leader" style="left:calc(-{gap_pt:.1f}pt - 3mm);'
+                    f'width:calc({gap_pt:.1f}pt + 14mm)"></span>{inline(notes[n])}</span>')
+        rows.append(f'<span class="{cls}">{_runs_html(runs) or "&#8203;"}{note}</span>')
+    cls = "code noted" if notes else "code"
+    return f'<div class="{cls}">{"".join(rows)}</div>\n'

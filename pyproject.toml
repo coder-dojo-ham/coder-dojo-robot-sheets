@@ -1,0 +1,28 @@
+[project]
+name = "robots-worksheets"
+version = "0.1.0"
+description = "Build CoderDojo robot worksheet PDFs from markdown sheets and snippets"
+requires-python = ">=3.11"
+dependencies = [
+  "weasyprint",
+  "markdown-it-py",
+  "mdit-py-plugins",
+  "pygments",
+  "pyyaml",
+  "segno",
+  "fonttools",
+  "pillow",
+  "pymupdf",
+  "zxing-cpp",
+  "opencv-python-headless",
+]
+
+[project.scripts]
+build-sheet = "worksheets.build:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/worksheets"]

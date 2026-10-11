@@ -1,0 +1,94 @@
+"""Page furniture and stylesheet for a worksheet: title, fact bar, hero, QR, footer link."""
+import io
+
+import segno
+
+CSS = """
+@page { size: A4; margin: 18mm 20.5mm 24mm 20.5mm;
+  @bottom-left { content: "%(link)s"; font-family: Arimo; font-size: 10pt; color: #1155cc;
+                 text-decoration: underline; padding-top: 4mm; }
+  @bottom-right { content: counter(page); font-family: Arimo; font-size: 10pt; color: #000; padding-top: 4mm; } }
+@page :first { @bottom-left { content: none; } @bottom-right { content: none; } }
+* { box-sizing: border-box; }
+body { font-family: Arimo, sans-serif; font-size: 11pt; line-height: 1.2; color: #000; margin: 0; }
+p { margin: 0 0 3.2mm; }
+h1 { font-size: 26pt; font-weight: normal; margin: 0 0 4mm; line-height: 1.1; }
+h2 { font-size: 20pt; font-weight: normal; margin: 7mm 0 3mm; line-height: 1.1; break-after: avoid; }
+h2.step, h2.checkpoint { break-before: page; margin-top: 0; }
+h2.nobreak { break-before: auto; margin-top: 7mm; }
+h3 { font-size: 14pt; font-weight: normal; color: #666; margin: 5mm 0 2mm; break-after: avoid; }
+ul, ol { margin: 0 0 3.2mm; padding-left: 9mm; }
+li { margin-bottom: 1.2mm; }
+code { font-family: Inconsolata, monospace; font-size: 11pt; color: #444; }
+strong code, code strong { font-weight: bold; color: #000; }
+img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
+.facts { width: 100%%; border-collapse: collapse; background: #0000ff; color: #fff; margin: 0 0 8mm;
+         table-layout: fixed; }
+.facts td { border: 1px solid #000; padding: 1.5mm 1.5mm; font-size: 10.5pt; vertical-align: top; }
+.facts .off { filter: grayscale(1); opacity: .45; }
+.hero { text-align: center; margin: 0 0 6mm; white-space: nowrap; }
+.hero img { height: 63mm; margin: 0 1mm; vertical-align: top; }
+.intro { display: table; width: 100%%; margin-bottom: 3mm; }
+.intro .qr { display: table-cell; width: 38mm; vertical-align: top; }
+.intro .qr svg { width: 36mm; height: 36mm; }
+.intro .text { display: table-cell; vertical-align: top; padding-left: 5mm; font-size: 10.5pt; }
+.link { margin-top: 8mm; font-size: 10pt; }
+.link a { color: #1155cc; }
+.tip, .warning { border: 1px solid #000; padding: 2mm 2.5mm; margin: 0 0 4mm; break-inside: avoid; }
+.tip p, .warning p { margin: 0; }
+.warning { font-size: 14pt; padding: 3mm 3mm; }
+.side, .side-right { display: table; width: 100%%; margin: 0 0 4mm; table-layout: fixed; break-inside: avoid; }
+.side > .fig, .side-right > .fig { display: table-cell; vertical-align: top; }
+.side > .text, .side-right > .text { display: table-cell; vertical-align: top; }
+.side > .fig { width: 50%%; } .side > .text { padding-left: 4mm; }
+.side-right > .fig { width: 50%%; } .side-right > .text { padding-right: 4mm; }
+.fig p, .text p:last-child { margin-bottom: 0; }
+.text p + p { margin-top: 3mm; }
+.fig img, .fig .diagram { max-width: 100%%; }
+.diagram { margin: 0; } .diagram svg { display: block; }
+.code { font-family: Inconsolata, monospace; font-size: 13pt; line-height: 1.12; background: #f3f3f3;
+        padding: 1.5mm 3mm; margin: 0 0 4mm; display: table; max-width: 100%%;
+        break-inside: avoid; position: relative; }
+.code .ln { display: block; white-space: pre; position: relative; }
+.code .hl { background: #fff2c2; margin: 0 -3mm; padding: 0 3mm; }
+.code .kw { color: #8b0056; font-weight: bold; } .code .fn { color: #000080; font-weight: bold; }
+.code .num { color: #c1580b; font-weight: bold; } .code .cm { color: #777; } .code .st { color: #067d17; }
+.code .mark { background: #fff; outline: 1.5px solid #fff; }
+.code .note { position: absolute; left: 100%%; top: 0; white-space: nowrap; padding-left: 12mm;
+              margin-left: 3mm; font-family: Arimo; font-size: 11pt; color: #000; }
+/* leader: starts at the end of the code text (width set inline), crosses the padding to the label */
+.code .note .leader { position: absolute; top: .62em; height: 0; border-top: 1px solid #000; }
+.code.noted { margin-right: 70mm; }
+img.emoji + img.emoji { margin-left: .12em; }
+"""
+
+PEPPER = "\U0001F336️"
+
+
+def qr_svg(url):
+    # vector so it prints crisp; high error correction for rough printers
+    buf = io.BytesIO()
+    segno.make(url, error="h").save(buf, kind="svg", scale=10, border=0, xmldecl=False,
+                                    svgns=True, nl=False)
+    return buf.getvalue().decode()
+
+
+def difficulty_html(level, total=5):
+    on = f'<span>{PEPPER}</span>' * level
+    off = f'<span class="off">{PEPPER}</span>' * (total - level)
+    return on + off
+
+
+def head_html(meta, intro_html, hero_srcs):
+    facts = (f'<td>Difficulty: {difficulty_html(int(meta["difficulty"]))}</td>'
+             f'<td>Language: {meta["language"]}</td><td>Requires: {meta["requires"]}</td>')
+    hero = "".join(f'<img src="{src}">' for src in hero_srcs)
+    return f"""<h1>{meta["title"]}</h1>
+<table class="facts"><tr>{facts}</tr></table>
+<div class="hero">{hero}</div>
+<div class="intro"><div class="qr">{qr_svg(meta["link"])}</div>
+<div class="text"><p><strong>Version: {meta["version"]}</strong></p>{intro_html}</div></div>"""
+
+
+def link_html(meta):
+    return f'<p class="link">Sheet link: <a href="{meta["link"]}">{meta["link"]}</a></p>'

@@ -1,7 +1,41 @@
 # coderdojo robots worksheets (code)
 
-Code for CoderDojo robot worksheets: example programs, generators, worksheet tooling.
+Builds CoderDojo robot worksheet PDFs from markdown sheets and reusable snippets - no Google Docs.
 
 - Sheets and assets (documents): `~/nextcloud/1-Areas/Orionrobots - coderdojo/robots-worksheets/`
-- Notes / area router: `orionrobots_memories/20-areas/coderdojo/`
+  (`assets/` in, `sheets/` PDFs out; `examples/` holds the old Google Docs PDF exports to match)
+- Notes / area router: `orionrobots_memories/20-areas/coderdojo/`; project log:
+  `orionrobots_memories/10-projects/2026-10-11-coderdojo-worksheet-framework/`
 - Older work to gather in: `coder_dojo_robots`, `coder-dojo-worksheets`, `coder-dojo-worksheets2` (inside the Nextcloud coderdojo area; embedded git repos, see the memories migration project)
+
+## Build
+
+```bash
+uv run build-sheet sheets/make-it-drive.md            # PDF -> Nextcloud sheets/
+uv run build-sheet sheets/make-it-drive.md /some/dir  # PDF -> elsewhere
+```
+
+Fonts (Arimo, Inconsolata) and emoji PNGs are fetched on first run into `fonts/` and `.cache/`
+(both git-ignored). Page PNG previews land in `.cache/previews/<sheet>/` and the build fails if the QR
+doesn't decode to the sheet link or the pinned fonts aren't embedded.
+
+## Writing a sheet
+
+`sheets/<name>.md`: YAML front matter (title, difficulty 1-5, language, requires, version, link, hero
+images from `assets/`), intro text up to `<!-- /intro -->` (sits beside the QR), the rest of the cover
+page up to the first `## `, then steps. `## Step N` / `## Checkpoint` start a new page; put `{.nobreak}`
+on the line above a heading to keep it flowing.
+
+| Feature | Markdown |
+| --- | --- |
+| Code, coloured keywords | ` ```python ` fence |
+| Tint changed lines | ` ```python {hl="2,3"} ` |
+| Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated) |
+| Tip / warning box | `::: tip` / `::: warning` ... `:::` |
+| Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` not yet exercised) |
+| Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/diagram.py` |
+| Image from `assets/` | `![alt](file.png){style="width:60mm"}` |
+| Reusable snippet | `{{> warn-stand}}` includes `snippets/warn-stand.md` (`{{> name key=value}}` fills `{{key}}`) |
+
+Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `diagram.py` (SVG
+robots), `markup.py` (markdown -> HTML), `page.py` (CSS + cover furniture), `verify.py`, `build.py`.
