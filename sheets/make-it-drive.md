@@ -6,6 +6,7 @@ requires: Laptop with Thonny and a Robot
 version: "1.0"
 link: https://tinyurl.com/robot-make-it-drive
 hero: [robot-wheel-closeup.png, square-path.png]
+qr: robot-make-it-drive-qr.png  # original export; omit to generate one from `link`
 ---
 Let’s get the robot to drive 🚗! These robots are driven with code, so can program them to follow a pattern, or respond to sensors.
 
@@ -98,7 +99,7 @@ Put the robot on its stand, and run this code with Thonny, you should see one wh
 ## Experiments to try:
 
 - Try changing the sleep times (they are fractions of a second).
-- Try using pins 10 and 11 for the other motor. If it goes back when you meant forward, you may need to swap the order of the pins.
+- Try using pins 8 and 9 for the other motor. If it goes back when you meant forward, you may need to swap the order of the pins.
 
 ## Step 2 - Full speed ahead! ⏫⏬
 
@@ -164,7 +165,6 @@ width: 55mm
 
 This goes at full speed, but what if we wanted to control the speed?
 
-{.nobreak}
 ## Step 3 - Controlling the speed 🐢🐇
 
 :::: side
@@ -232,7 +232,7 @@ try:
         time.sleep(0.5)
 ```
 
-By dividing the loop counter by 10, we get a fraction value between 0 and 1. By multiplying it by MAX_SPEED we get a power level.
+By dividing the loop counter by 10, we get a fraction value between 0 and 1. By multiplying it by `MAX_SPEED` we get a power level.
 We can then send this to the motors with the PWM `duty_u16` function. We want to sleep between each loop, so we have time to observe the effect.
 
 We’ve put the speed test in a try section, so we can then use `finally` to ensure the motors always stop:

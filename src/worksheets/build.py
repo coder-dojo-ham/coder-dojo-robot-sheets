@@ -46,10 +46,10 @@ def build_html(meta, intro, cover, steps):
     return f"<html><body>{emojify(page)}</body></html>"
 
 
-def render_pdf(html, meta, out_pdf):
+def render_pdf(html, out_pdf):
     fonts = ensure_fonts()
     config = FontConfiguration()  # @font-face only applies when CSS and render share one
-    css = weasyprint.CSS(string=font_face_css(fonts) + CSS % {"link": meta["link"]},
+    css = weasyprint.CSS(string=font_face_css(fonts) + CSS,
                          font_config=config)
     out_pdf.parent.mkdir(parents=True, exist_ok=True)
     weasyprint.HTML(string=html, base_url=str(Path.cwd())).write_pdf(
@@ -61,7 +61,7 @@ def main():
     out_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else OUTPUT
     meta, intro, cover, steps = split_sheet(sheet.read_text())
     out_pdf = out_dir / f"{sheet.stem}.pdf"
-    render_pdf(build_html(meta, intro, cover, steps), meta, out_pdf)
+    render_pdf(build_html(meta, intro, cover, steps), out_pdf)
     verify(out_pdf, meta, CACHE / "previews" / sheet.stem)
     print(out_pdf)
 

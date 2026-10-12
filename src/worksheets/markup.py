@@ -51,6 +51,15 @@ def _render_image(self, tokens, idx, options, env):
     return self.renderToken(tokens, idx, options, env)
 
 
+def _mark_lead_ins(state):
+    """Class `lead` on any paragraph directly followed by a code fence (see .lead in page.py)."""
+    tokens = state.tokens
+    for i in range(len(tokens) - 3):
+        if (tokens[i].type == "paragraph_open" and tokens[i + 2].type == "paragraph_close"
+                and tokens[i + 3].type == "fence"):
+            tokens[i].attrJoin("class", "lead")
+
+
 def build_parser():
     md = (MarkdownIt("commonmark", {"typographer": True, "html": True})
           .enable(["replacements", "smartquotes", "table"])
@@ -61,6 +70,7 @@ def build_parser():
         md.use(container_plugin, name=name,
                render=lambda self, tokens, idx, options, env, name=name:
                f'<div class="{name}">\n' if tokens[idx].nesting == 1 else "</div>\n")
+    md.core.ruler.push("lead_ins", _mark_lead_ins)
     md.add_render_rule("fence", _fence_renderer(md))
     md.add_render_rule("image", _render_image)
     return md

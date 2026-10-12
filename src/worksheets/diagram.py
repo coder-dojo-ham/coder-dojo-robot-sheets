@@ -21,7 +21,7 @@ import yaml
 BLUE, YELLOW, ORANGE = "#cfe2f3", "#ffff00", "#ff9900"
 OUTLINE = 'stroke="#000" stroke-width="1.3" stroke-linejoin="round"'
 
-BODY = (f'<path d="M70,70 L150,25 L230,70 L230,195 C230,240 70,240 70,195 Z" '
+BODY = (f'<path d="M70,70 L150,42 L230,70 L230,195 C230,240 70,240 70,195 Z" '
         f'fill="{BLUE}" {OUTLINE}/>')
 
 
@@ -67,7 +67,7 @@ def _path_arrow(d, head):
 
 BIG_ARROWS = {
     "forward": lambda: _block_arrow(
-        [(128, 205), (128, 112), (104, 112), (150, 52), (196, 112), (172, 112), (172, 205)]),
+        [(127, 124), (127, 19), (105, 19), (150, -31), (195, 19), (173, 19), (173, 124)]),
     "backward": lambda: _block_arrow(
         [(128, 96), (128, 190), (104, 190), (150, 245), (196, 190), (172, 190), (172, 96)]),
     "spin": lambda: _path_arrow("M118,200 L118,125 A37,37 0 0 1 192,125 L192,165",
@@ -77,8 +77,13 @@ BIG_ARROWS = {
 }
 
 
+# (y, height): thinner and closer together towards the tail, to suggest the speed building up
+SPEED_BARS = [(24, 10), (59, 10), (88, 5), (110, 5)]
+
+
 def _stripes():
-    return "".join(f'<rect x="124" y="{y}" width="52" height="6" fill="#fff"/>' for y in (92, 118))
+    return "".join(f'<rect x="110" y="{y}" width="80" height="{h}" fill="#fff"/>'
+                   for y, h in SPEED_BARS)
 
 
 def _text(x, y, s, anchor="middle", size=17):
@@ -115,6 +120,9 @@ def render_robot(block):
     labelled = bool(spec.get("pins") or spec.get("wheel-names") or spec.get("caption"))
     x0, w = (-112, 530) if labelled else (0, 300)
     h = 285 if labelled else 255
+    # the forward arrow points past the robot's nose, so make room above it
+    y0 = -40 if spec.get("arrow") == "forward" else 0
+    h -= y0
     inner = BODY + _wheels()
     for side in ("left", "right"):
         if side in spec:
@@ -126,4 +134,4 @@ def render_robot(block):
     inner += _labels(spec)
     width = spec.get("width", "70mm")
     return (f'<figure class="diagram" style="width:{width}"><svg xmlns="http://www.w3.org/2000/svg" '
-            f'viewBox="{x0} 0 {w} {h}" width="100%">{inner}</svg></figure>\n')
+            f'viewBox="{x0} {y0} {w} {h}" width="100%">{inner}</svg></figure>\n')
