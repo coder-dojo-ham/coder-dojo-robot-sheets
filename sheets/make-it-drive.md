@@ -36,9 +36,7 @@ left: [up, down]
 right: [up, down]
 front: true
 wheel-names: true
-caption: Motor control pins
 pins: {left-up: Pin 11, left-down: Pin 10, right-up: Pin 8, right-down: Pin 9}
-width: 110mm
 ```
 
 We start with imports:
@@ -105,6 +103,8 @@ Put the robot on its stand, and run this code with Thonny, you should see one wh
 
 We’ve made one motor move, but to drive the robot forward, we need both motors. In a **new file**:
 
+:::: side
+::: fig
 ```python
 from machine import Pin
 import time
@@ -114,6 +114,15 @@ motor_r_back = Pin(9, Pin.OUT)
 motor_l_forward = Pin(11, Pin.OUT)
 motor_l_back = Pin(10, Pin.OUT)
 ```
+:::
+::: text
+```robot
+left: up
+right: up
+arrow: forward-short
+```
+:::
+::::
 
 This now has variables for pins on both motors. The key to this working, is that both motors forward pins are on at the same time:
 
@@ -158,7 +167,6 @@ finally:
 left: down
 right: down
 arrow: backward
-width: 55mm
 ```
 :::
 ::::
@@ -174,7 +182,6 @@ left: up
 right: up
 arrow: forward
 stripes: true
-width: 62mm
 ```
 :::
 ::: text
@@ -380,7 +387,6 @@ finally:
 left: up
 right: down
 arrow: spin
-width: 62mm
 ```
 :::
 ::: text
@@ -414,7 +420,6 @@ You can control how far the robot spins with the speed of the spin, or the time 
 left: up
 right: up
 arrow: curve-left
-width: 62mm
 ```
 :::
 ::: text

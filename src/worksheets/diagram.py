@@ -5,18 +5,20 @@ Driven by a small YAML block in the sheet, e.g.
     ```robot
     left: [up, down]        # arrows beside the left wheel: up / down / [up, down]
     right: up
-    arrow: forward          # big arrow: forward backward spin curve-left (omit for none)
+    arrow: forward          # big arrow: forward forward-short backward spin curve-left (omit for none)
     stripes: true           # white speed stripes across the big arrow
     front: true             # 'Robot front' label
     pins: {left-up: Pin 11, left-down: Pin 10, right-up: Pin 8, right-down: Pin 9}
     wheel-names: true       # 'Left Wheel' / 'Right Wheel' boxes
     caption: Motor control pins
-    width: 70mm
     ```
 """
 import html
 
 import yaml
+
+# One scale for every diagram, so the robot is the same size wherever it appears.
+MM_PER_UNIT = 0.207
 
 BLUE, YELLOW, ORANGE = "#cfe2f3", "#ffff00", "#ff9900"
 OUTLINE = 'stroke="#000" stroke-width="1.3" stroke-linejoin="round"'
@@ -68,6 +70,9 @@ def _path_arrow(d, head):
 BIG_ARROWS = {
     "forward": lambda: _block_arrow(
         [(127, 124), (127, 19), (105, 19), (150, -31), (195, 19), (173, 19), (173, 124)]),
+    # same arrow, shorter: tip just clears the nose (y=42), for tight layouts
+    "forward-short": lambda: _block_arrow(
+        [(127, 124), (127, 56), (105, 56), (150, 6), (195, 56), (173, 56), (173, 124)]),
     "backward": lambda: _block_arrow(
         [(128, 96), (128, 190), (104, 190), (150, 245), (196, 190), (172, 190), (172, 96)]),
     "spin": lambda: _path_arrow("M118,200 L118,125 A37,37 0 0 1 192,125 L192,165",
@@ -78,6 +83,9 @@ BIG_ARROWS = {
 
 
 # (y, height): thinner and closer together towards the tail, to suggest the speed building up
+# arrows that point past the robot's nose need room above it: viewBox top for each
+ARROW_TOP = {"forward": -40, "forward-short": -8}
+
 SPEED_BARS = [(24, 10), (59, 10), (88, 5), (110, 5)]
 
 
@@ -108,7 +116,8 @@ def _labels(spec):
         parts.append(_wheel_name(-108, "Left"))
         parts.append(_wheel_name(346, "Right"))
     if spec.get("front"):
-        parts.append(_text(150, 62, "Robot front"))
+        # below the sloped nose lines, above the motors
+        parts.append(_text(150, 89, "Robot front"))
     if spec.get("caption"):
         parts.append(_text(150, 268, spec["caption"]))
     return "".join(parts)
@@ -119,9 +128,8 @@ def render_robot(block):
     spec = yaml.safe_load(block) or {}
     labelled = bool(spec.get("pins") or spec.get("wheel-names") or spec.get("caption"))
     x0, w = (-112, 530) if labelled else (0, 300)
-    h = 285 if labelled else 255
-    # the forward arrow points past the robot's nose, so make room above it
-    y0 = -40 if spec.get("arrow") == "forward" else 0
+    h = 285 if spec.get("caption") else 255
+    y0 = ARROW_TOP.get(spec.get("arrow"), 0)
     h -= y0
     inner = BODY + _wheels()
     for side in ("left", "right"):
@@ -132,6 +140,5 @@ def render_robot(block):
         if spec.get("stripes"):
             inner += _stripes()
     inner += _labels(spec)
-    width = spec.get("width", "70mm")
-    return (f'<figure class="diagram" style="width:{width}"><svg xmlns="http://www.w3.org/2000/svg" '
+    return (f'<figure class="diagram" style="width:{w * MM_PER_UNIT:.1f}mm"><svg xmlns="http://www.w3.org/2000/svg" '
             f'viewBox="{x0} {y0} {w} {h}" width="100%">{inner}</svg></figure>\n')
