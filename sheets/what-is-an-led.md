@@ -19,6 +19,7 @@ Here’s what we’ll do:
 2. **Turn off an LED**: How to turn off an LED in Python
 3. **Try some other LEDs**: How pin numbers related to LEDs
 4. **Make an LED Blink**: How to use a loop make the lights flash! ✨
+5. **Animating LEDs**: Use a list and loops to run lights in sequence
 
 Are you ready to play with the LEDs?
 
@@ -139,3 +140,63 @@ while True:
 - Could you blink different LEDs?
 - Maybe you could blink more than one at the same time?
 - Can you blink between some LED’s alternately?
+
+## Step 5 - Animating LEDs
+
+Blinking is simple animation, but we can do more with LEDs than blink a single LED.
+
+First we need the LEDs in a list. Create a **new file** and start it with:
+
+```python
+from machine import Pin
+from time import sleep
+```
+
+:::: side-right
+::: text
+Then add a list with every LED pin in it:
+
+```python
+leds = [
+    Pin(0, Pin.OUT),
+    Pin(1, Pin.OUT),
+    Pin(2, Pin.OUT),
+    Pin(3, Pin.OUT),
+    Pin(4, Pin.OUT),
+    Pin(5, Pin.OUT),
+    Pin(6, Pin.OUT),
+    Pin(7, Pin.OUT),
+    Pin(16, Pin.OUT),
+    Pin(17, Pin.OUT),
+    Pin(26, Pin.OUT),
+    Pin(27, Pin.OUT),
+    Pin(28, Pin.OUT),
+]
+```
+
+Mind the gaps here!
+:::
+::: fig
+![LED pin numbers](led-pin-strip.png){style="width:38mm"}
+:::
+::::
+
+We can now loop over the LEDs and turn them on:
+
+```python
+while True:
+    for led in leds:
+        led.value(1)
+        sleep(0.2)
+    for led in leds:
+        led.value(0)
+        sleep(0.2)
+```
+
+You should now see all the LEDs light up in sequence, then turn off.
+
+{.nobreak}
+## Can you make other animations here?
+
+- Can you adjust the timing? Make it faster or slower?
+- You can use this method to turn each LED on then off - making lights sweep back and forth along the list, or do multiple sweeps.
