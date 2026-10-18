@@ -2,7 +2,8 @@
 
 Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **-0.7**"}:
   hl    comma separated 1-based lines to tint (the lines the kid should change/add)
-  note  ';'-separated "line|token|label": boxes `token` on that line and hangs a label off it
+  note  ';'-separated "line|token|label": boxes `token` on that line and hangs a label off it;
+        the token can be whitespace (e.g. 4 spaces to flag an indent), the label may use <br>
   tone  "error" prints the block in red, like a Thonny traceback
 Use ```pycon for a REPL session: the `>>>` prompt is styled like Thonny's.
 """
@@ -13,6 +14,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.token import Comment, Generic, Keyword, Name, Number, String
 
 ATTR = re.compile(r'(\w+)="([^"]*)"')
+LEADER_GAP_MM = 1.5  # air between the end of the code and the start of its leader line
 FONT_PT = 13  # keep in step with .code font-size in page.py
 ADVANCE = 0.5  # Inconsolata glyph advance in em, so line width is known without measuring
 
@@ -102,10 +104,13 @@ def render_code(code, lang, info="", inline=lambda s: s):
             # leader runs from the end of this line's text to the label, which sits past the block
             gap_pt = (widest - len("".join(t for _, t in runs))) * FONT_PT * ADVANCE
             note = (f'<span class="note">'
-                    f'<span class="leader" style="left:calc(-{gap_pt:.1f}pt - 3mm);'
-                    f'width:calc({gap_pt:.1f}pt + 14mm)"></span>{inline(notes[n])}</span>')
+                    f'<span class="leader" style="left:calc(-{gap_pt:.1f}pt - {3 - LEADER_GAP_MM}mm);'
+                    f'width:calc({gap_pt:.1f}pt + {14 - LEADER_GAP_MM}mm)"></span>{inline(notes[n])}</span>')
         rows.append(f'<span class="{cls}">{_runs_html(runs) or "&#8203;"}{note}</span>')
     cls = "code noted" if notes else "code"
+    # a label with <br> runs below its line; reserve that room so it can't hit what follows
+    spill = max((no + notes[no].count("<br>") - len(lines) for no in notes), default=0)
+    style = f' style="margin-bottom:calc(4mm + {spill * FONT_PT * 1.12:.1f}pt)"' if spill > 0 else ""
     if attrs.get("tone") == "error":
         cls += " err"
-    return f'<div class="{cls}">{"".join(rows)}</div>\n'
+    return f'<div class="{cls}"{style}>{"".join(rows)}</div>\n'

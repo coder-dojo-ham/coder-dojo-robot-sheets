@@ -98,7 +98,7 @@ On the board, you will see little numbers with “GP” (short for General Purpo
 The image on the right shows the LED pin numbers. There are gaps because those pin numbers are used for something else on the robot.
 :::
 ::: fig
-![LED pin numbers](led-pin-strip.png){style="width:24mm"}
+![LED pin numbers](led-pin-strip.png){style="width:38mm"}
 :::
 ::::
 
@@ -122,7 +122,7 @@ While we can type `value(0)` and `value(1)` for a pin to make it blink, these ar
 
 Try this in Thonny editor:
 
-```python {note="5|True|This means to loop forever;7|sleep|Sleeps say how long we want an LED on or off for."}
+```python {note="5|True|This means to loop forever;7|sleep|Sleeps say how long we want an LED on or off for.;9|    |This gap (4 spaces or press the TAB key)<br>tells python that these four lines are to<br>run inside the loop."}
 from machine import Pin
 from time import sleep
 
@@ -133,8 +133,6 @@ while True:
     led.value(0)
     sleep(0.2)
 ```
-
-This gap (4 spaces or press the TAB key) tells python that these four lines are to run inside the loop.
 
 ## What else could you add?
 
