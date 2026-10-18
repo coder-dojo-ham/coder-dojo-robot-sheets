@@ -5,6 +5,7 @@ language: MicroPython
 requires: Laptop with Python, Thonny and a Robot kit
 version: "1.0"
 link: https://tinyurl.com/dojo-what-is-an-led
+pdf_link: https://drive.google.com/file/d/1OB-jCAx7PjnKGWfU4E43ljIoachvfbAD/view  # the published PDF in the shared drive
 hero: [led-digital-io-status.png]
 qr: dojo-what-is-an-led-qr.png
 ---

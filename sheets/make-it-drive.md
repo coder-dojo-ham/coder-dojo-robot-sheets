@@ -5,6 +5,7 @@ language: MicroPython
 requires: Laptop with Thonny and a Robot
 version: "1.0"
 link: https://tinyurl.com/robot-make-it-drive
+pdf_link: https://drive.google.com/file/d/1_aQZ4OTaQi4755W07Y7ElXY6j0I0Vjzl/view  # the published PDF in the shared drive
 hero: [robot-wheel-closeup.png, square-path.png]
 qr: robot-make-it-drive-qr.png  # original export; omit to generate one from `link`
 ---

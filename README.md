@@ -29,7 +29,7 @@ doesn't decode to the sheet link or the pinned fonts aren't embedded.
 ## Writing a sheet
 
 `sheets/<name>.md`: YAML front matter (title, difficulty 1-5, language, requires, version, link, hero
-images from `assets/`), intro text up to `<!-- /intro -->` (sits beside the QR), the rest of the cover
+images from `assets/`, `pdf_link` = the PDF's Drive share link, pasted once; it stays valid when `publish-sheets` overwrites the file), intro text up to `<!-- /intro -->` (sits beside the QR), the rest of the cover
 page up to the first `## `, then steps. `## Step N` / `## Checkpoint` start a new page; put `{.nobreak}`
 on the line above a heading to keep it flowing.
 
