@@ -19,6 +19,7 @@ dependencies = [
 
 [project.scripts]
 build-sheet = "worksheets.build:main"
+publish-sheets = "worksheets.publish:main"
 
 [build-system]
 requires = ["hatchling"]

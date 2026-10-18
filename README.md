@@ -15,6 +15,13 @@ uv run build-sheet sheets/make-it-drive.md            # PDF -> Nextcloud sheets/
 uv run build-sheet sheets/make-it-drive.md /some/dir  # PDF -> elsewhere
 ```
 
+Copy the built PDFs to the shared CoderDojo KU Google Drive `Worksheets/` folder:
+
+```bash
+cp .env.example .env        # once per machine; set GDRIVE_WORKSHEETS_DIR (git-ignored)
+uv run publish-sheets       # mounted path, or a Windows G:\... path via powershell.exe on WSL
+```
+
 Fonts (Arimo, Inconsolata) and emoji PNGs are fetched on first run into `fonts/` and `.cache/`
 (both git-ignored). Page PNG previews land in `.cache/previews/<sheet>/` and the build fails if the QR
 doesn't decode to the sheet link or the pinned fonts aren't embedded.
