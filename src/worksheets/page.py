@@ -3,7 +3,7 @@ import io
 
 import segno
 
-from .config import ASSETS
+from .config import asset
 
 CSS = """
 @page { size: A4; margin: 18mm 20.5mm 24mm 20.5mm;
@@ -14,7 +14,11 @@ body { font-family: Arimo, sans-serif; font-size: 11pt; line-height: 1.2; color:
 p { margin: 0 0 3.2mm; }
 /* a paragraph introducing a code block stays on the page with it */
 p.lead { break-after: avoid; }
-h1 { font-size: 26pt; font-weight: normal; margin: 0 0 4mm; line-height: 1.1; }
+h1 { font-size: 26pt; font-weight: normal; margin: 0; line-height: 1.1; }
+.titlebar { display: table; width: 100%; margin: 0 0 4mm; }
+.titlebar > * { display: table-cell; vertical-align: middle; }
+.titlebar .logo { text-align: right; width: 62mm; }
+.titlebar .logo img { width: 58mm; }
 h2 { font-size: 20pt; font-weight: normal; margin: 7mm 0 3mm; line-height: 1.1; break-after: avoid; }
 h2.step, h2.checkpoint { break-before: page; margin-top: 0; }
 h2.nobreak { break-before: auto; margin-top: 7mm; }
@@ -62,10 +66,12 @@ img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
               margin-left: 3mm; font-family: Arimo; font-size: 11pt; color: #000; }
 /* leader: starts at the end of the code text (width set inline), crosses the padding to the label */
 .code .note .leader { position: absolute; top: .62em; height: 0; border-top: 1px solid #000; }
+.code.err, .code.err .ln { color: #f00; background: none; padding-left: 0; }
 .code.noted { margin-right: 70mm; }
 img.emoji + img.emoji { margin-left: .12em; }
 """
 
+LOGO = "coderdojo-ku-logo.png"  # shared asset, top right of every cover
 PEPPER = "\U0001F336️"
 
 
@@ -86,7 +92,7 @@ def difficulty_html(level, total=5):
 def qr_html(meta):
     """The sheet's own QR image if it has one (e.g. the original export), else generated."""
     if meta.get("qr"):
-        return f'<img src="{(ASSETS / meta["qr"]).as_uri()}">'
+        return f'<img src="{asset(meta["qr"]).as_uri()}">'
     return qr_svg(meta["link"])
 
 
@@ -94,7 +100,8 @@ def head_html(meta, intro_html, hero_srcs):
     facts = (f'<td>Difficulty: {difficulty_html(int(meta["difficulty"]))}</td>'
              f'<td>Language: {meta["language"]}</td><td>Requires: {meta["requires"]}</td>')
     hero = "".join(f'<img src="{src}">' for src in hero_srcs)
-    return f"""<h1>{meta["title"]}</h1>
+    return f"""<div class="titlebar"><h1>{meta["title"]}</h1>
+<div class="logo"><img src="{asset(LOGO).as_uri()}"></div></div>
 <table class="facts"><tr>{facts}</tr></table>
 <div class="hero">{hero}</div>
 <div class="intro"><div class="qr">{qr_html(meta)}</div>

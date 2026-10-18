@@ -12,7 +12,7 @@ import weasyprint
 import yaml
 from weasyprint.text.fonts import FontConfiguration
 
-from .config import ASSETS, CACHE, OUTPUT
+from .config import CACHE, OUTPUT, asset, select_sheet
 from .emojis import emojify
 from .fonts import ensure_fonts, font_face_css
 from .markup import to_html
@@ -40,7 +40,7 @@ def mark_step_headings(html):
 
 
 def build_html(meta, intro, cover, steps):
-    hero = [(ASSETS / name).as_uri() for name in meta.get("hero", [])]
+    hero = [asset(name).as_uri() for name in meta.get("hero", [])]
     page = (head_html(meta, to_html(intro), hero) + to_html(cover) + link_html(meta)
             + mark_step_headings(to_html(steps)))
     return f"<html><body>{emojify(page)}</body></html>"
@@ -59,6 +59,7 @@ def render_pdf(html, out_pdf):
 def main():
     sheet = Path(sys.argv[1])
     out_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else OUTPUT
+    select_sheet(sheet.stem)
     meta, intro, cover, steps = split_sheet(sheet.read_text())
     out_pdf = out_dir / f"{sheet.stem}.pdf"
     render_pdf(build_html(meta, intro, cover, steps), out_pdf)

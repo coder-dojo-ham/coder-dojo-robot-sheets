@@ -7,7 +7,7 @@ from mdit_py_plugins.container import container_plugin
 from mdit_py_plugins.front_matter import front_matter_plugin
 
 from .code import render_code
-from .config import ASSETS, SNIPPETS
+from .config import SNIPPETS, asset
 from .diagram import render_robot
 
 INCLUDE = re.compile(r"^\{\{>\s*([\w-]+)((?:\s+\w+=\S+)*)\s*\}\}\s*$", re.MULTILINE)
@@ -45,7 +45,7 @@ def _render_image(self, tokens, idx, options, env):
     token = tokens[idx]
     src = token.attrGet("src")
     if not src.startswith(("http", "file:", "/")):
-        src = (ASSETS / src).as_uri()
+        src = asset(src).as_uri()
     token.attrSet("src", src)
     token.attrSet("alt", token.content)
     return self.renderToken(tokens, idx, options, env)

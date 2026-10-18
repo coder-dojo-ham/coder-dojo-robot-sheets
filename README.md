@@ -3,7 +3,7 @@
 Builds CoderDojo robot worksheet PDFs from markdown sheets and reusable snippets - no Google Docs.
 
 - Sheets and assets (documents): `~/nextcloud/1-Areas/Orionrobots - coderdojo/robots-worksheets/`
-  (`assets/` in, `sheets/` PDFs out; `examples/` holds the old Google Docs PDF exports to match)
+  (`assets/<sheet>/` in for a sheet's own images, `assets/` for ones shared between sheets; `sheets/` PDFs out; `examples/` holds the old Google Docs PDF exports to match)
 - Notes / area router: `orionrobots_memories/20-areas/coderdojo/`; project log:
   `orionrobots_memories/10-projects/2026-10-11-coderdojo-worksheet-framework/`
 - Older work to gather in: `coder_dojo_robots`, `coder-dojo-worksheets`, `coder-dojo-worksheets2` (inside the Nextcloud coderdojo area; embedded git repos, see the memories migration project)
@@ -29,10 +29,12 @@ on the line above a heading to keep it flowing.
 | Feature | Markdown |
 | --- | --- |
 | Code, coloured keywords | ` ```python ` fence |
+| REPL session (Thonny-style `>>>`) | ` ```pycon ` fence |
+| Error text in red | ` ```text {tone="error"} ` |
 | Tint changed lines | ` ```python {hl="2,3"} ` |
 | Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated) |
 | Tip / warning box | `::: tip` / `::: warning` ... `:::` |
-| Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` not yet exercised) |
+| Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` puts the figure on the right; used in What is an LED) |
 | Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/diagram.py` |
 | Image from `assets/` | `![alt](file.png){style="width:60mm"}` |
 | Reusable snippet | `{{> warn-stand}}` includes `snippets/warn-stand.md` (`{{> name key=value}}` fills `{{key}}`) |

@@ -3,12 +3,14 @@
 Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **-0.7**"}:
   hl    comma separated 1-based lines to tint (the lines the kid should change/add)
   note  ';'-separated "line|token|label": boxes `token` on that line and hangs a label off it
+  tone  "error" prints the block in red, like a Thonny traceback
+Use ```pycon for a REPL session: the `>>>` prompt is styled like Thonny's.
 """
 import html
 import re
 
 from pygments.lexers import get_lexer_by_name
-from pygments.token import Comment, Keyword, Name, Number, String
+from pygments.token import Comment, Generic, Keyword, Name, Number, String
 
 ATTR = re.compile(r'(\w+)="([^"]*)"')
 FONT_PT = 13  # keep in step with .code font-size in page.py
@@ -21,7 +23,7 @@ def parse_attrs(info):
 
 def _css_class(ttype):
     # Mirrors the Thonny look the old sheets used: bold keywords, bold def names, orange numbers.
-    if ttype in Keyword:
+    if ttype in Keyword or ttype in Generic.Prompt:
         return "kw"
     if ttype in Name.Function or ttype in Name.Class:
         return "fn"
@@ -104,4 +106,6 @@ def render_code(code, lang, info="", inline=lambda s: s):
                     f'width:calc({gap_pt:.1f}pt + 14mm)"></span>{inline(notes[n])}</span>')
         rows.append(f'<span class="{cls}">{_runs_html(runs) or "&#8203;"}{note}</span>')
     cls = "code noted" if notes else "code"
+    if attrs.get("tone") == "error":
+        cls += " err"
     return f'<div class="{cls}">{"".join(rows)}</div>\n'
