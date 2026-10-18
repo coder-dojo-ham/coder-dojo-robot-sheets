@@ -85,12 +85,12 @@ We can now say an LED has a purpose, maybe for saying we need a banana?
 
 Our robot has many controllable LEDs. Lets try a different LED number:
 
+:::: side-right
+::: text
 ```python
 Pin(4, Pin.OUT).value(1)
 ```
 
-:::: side-right
-::: text
 This should turn on another LED. See how the number after Pin has changed? Each of the controllable LEDs on the robot is connected to a numbered Pin.
 
 On the board, you will see little numbers with “GP” (short for General Purpose) in front of them, these are Pin numbers.

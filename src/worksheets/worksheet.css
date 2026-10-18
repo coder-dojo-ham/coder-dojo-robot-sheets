@@ -41,7 +41,7 @@ img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
 .side > .fig, .side-right > .fig { display: table-cell; vertical-align: top; }
 .side > .text, .side-right > .text { display: table-cell; vertical-align: top; }
 .side > .fig { width: 50%; } .side > .text { padding-left: 4mm; }
-.side-right > .fig { width: 50%; text-align: right; } .side-right > .text { padding-right: 4mm; }
+.side-right > .fig { width: 42mm; text-align: right; } .side-right > .text { padding-right: 4mm; }
 .fig p, .text p:last-child { margin-bottom: 0; }
 .text p + p { margin-top: 3mm; }
 .fig img, .fig .diagram { max-width: 100%; }
