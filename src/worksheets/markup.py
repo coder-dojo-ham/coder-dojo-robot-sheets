@@ -8,7 +8,7 @@ from mdit_py_plugins.front_matter import front_matter_plugin
 
 from .code import render_code
 from .config import SNIPPETS, asset
-from .diagram import render_robot
+from .robot_diagram import render_robot
 
 INCLUDE = re.compile(r"^\{\{>\s*([\w-]+)((?:\s+\w+=\S+)*)\s*\}\}\s*$", re.MULTILINE)
 ARG = re.compile(r"(\w+)=(\S+)")
