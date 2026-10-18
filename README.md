@@ -35,9 +35,9 @@ on the line above a heading to keep it flowing.
 | Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated) |
 | Tip / warning box | `::: tip` / `::: warning` ... `:::` |
 | Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` puts the figure on the right; used in What is an LED) |
-| Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/diagram.py` |
+| Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/robot_diagram.py` |
 | Image from `assets/` | `![alt](file.png){style="width:60mm"}` |
 | Reusable snippet | `{{> warn-stand}}` includes `snippets/warn-stand.md` (`{{> name key=value}}` fills `{{key}}`) |
 
-Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `diagram.py` (SVG
-robots), `markup.py` (markdown -> HTML), `page.py` (CSS + cover furniture), `verify.py`, `build.py`.
+Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `robot_diagram.py` (SVG
+robots), `markup.py` (markdown -> HTML), `page.py` (cover furniture), `worksheet.css` (all styling), `verify.py`, `build.py`.
