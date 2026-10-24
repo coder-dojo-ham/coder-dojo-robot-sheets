@@ -1,5 +1,5 @@
 ---
-title: Drive a robot!
+title: Drive a robot
 difficulty: 3
 language: MicroPython
 requires: Laptop with Thonny and a Robot
