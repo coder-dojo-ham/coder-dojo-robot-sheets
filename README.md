@@ -26,6 +26,12 @@ Fonts (Arimo, Inconsolata) and emoji PNGs are fetched on first run into `fonts/`
 (both git-ignored). Page PNG previews land in `.cache/previews/<sheet>/` and the build fails if the QR
 doesn't decode to the sheet link or the pinned fonts aren't embedded.
 
+## Overview sheet
+
+`sheets/all-robot-sheets.md` has `layout: overview`: one landscape page, no markdown body. Front matter `link` is the
+master QR and `tiles` (title, link, difficulty, images) are the per-sheet tiles; every QR is generated and
+checked by the build. Change a tile's `link` when its `/dojo/...` short link goes live. See `src/worksheets/overview.py`.
+
 ## Writing a sheet
 
 `sheets/<name>.md`: YAML front matter (title, difficulty 1-5, language, requires, version, link, hero

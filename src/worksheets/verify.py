@@ -22,14 +22,14 @@ def _qr_texts(page):
     return [b.text for b in zxingcpp.read_barcodes(gray)]
 
 
-def verify(pdf_path, meta, preview_dir):
+def verify(pdf_path, links, preview_dir):
     doc = render_previews(pdf_path, preview_dir)
     problems = []
-    if meta["link"] not in _qr_texts(doc[0]):
-        problems.append(f"QR on page 1 does not decode to {meta['link']}")
+    found = _qr_texts(doc[0])
+    problems += [f"no QR on page 1 decodes to {link}" for link in links if link not in found]
     fonts = {f[3].split("+")[-1] for page in doc for f in page.get_fonts()}
     if not any(name.startswith("Arimo") for name in fonts):
         problems.append(f"body font Arimo not embedded (got {sorted(fonts)})")
     if problems:
         sys.exit("VERIFY FAILED:\n  " + "\n  ".join(problems))
-    print(f"OK: {len(doc)} pages, QR decodes to the sheet link, fonts {sorted(fonts)}")
+    print(f"OK: {len(doc)} pages, page 1 QR codes decode to their links, fonts {sorted(fonts)}")

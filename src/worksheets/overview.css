@@ -1,0 +1,25 @@
+@page { size: A4 landscape; margin: 8mm 10mm; }
+* { box-sizing: border-box; }
+body { font-family: Arimo, sans-serif; font-size: 14pt; line-height: 1.2; color: #000; margin: 0; }
+a { color: #1155cc; text-decoration: none; }
+img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
+table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+td { padding: 0; vertical-align: top; }
+.head { margin-bottom: 4mm; }
+.head .logo { width: 72mm; vertical-align: middle; }
+.head .logo img { width: 66mm; }
+.head .title { text-align: center; vertical-align: middle; font-size: 13pt; }
+.head h1 { font-size: 30pt; font-weight: bold; text-transform: uppercase; margin: 0 0 3mm; line-height: 1.1; }
+.head .master-qr { width: 30mm; }
+.head .master-qr svg { width: 28mm; height: 28mm; display: block; margin-left: auto; }
+.tile { padding: 0 3mm 4mm 0; }
+.tile-head { font-size: 15pt; }
+.tile-title { margin-right: 3mm; }
+.tile + .tile { padding-left: 3mm; padding-right: 0; }
+.tile > a { font-size: 10pt; display: block; margin-bottom: 1.5mm; }
+.peppers .off { filter: grayscale(1); opacity: .45; }
+.peppers img.emoji { height: .9em; width: .9em; }
+.tile-body .qr { width: 38mm; text-align: right; }
+.tile-body .qr svg { width: 35mm; height: 35mm; display: block; margin-left: auto; }
+.tile-body .pics { white-space: nowrap; }
+.tile-body .pics img { height: 35mm; margin-right: 2.5mm; vertical-align: top; }
