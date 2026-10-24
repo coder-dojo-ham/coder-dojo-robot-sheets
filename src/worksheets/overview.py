@@ -18,11 +18,11 @@ def display_link(url):
 
 def tile_html(tile):
     images = "".join(f'<img src="{asset(name).as_uri()}">' for name in tile["images"])
-    return f"""<td class="tile"><div class="tile-head"><span class="tile-title">{tile["title"]}</span>
+    return f"""<td class="tile"><div class="card"><div class="tile-head"><span class="tile-title">{tile["title"]}</span>
 <span class="peppers">{difficulty_html(int(tile["difficulty"]))}</span></div>
 <a href="{tile["link"]}">{display_link(tile["link"])}</a>
-<table class="tile-body"><tr><td class="pics">{images}</td>
-<td class="qr">{qr_svg(tile["link"])}</td></tr></table></td>"""
+<table class="tile-body"><tr><td class="qr">{qr_svg(tile["link"])}</td>
+<td class="pics">{images}</td></tr></table></div></td>"""
 
 
 def rows_html(tiles):

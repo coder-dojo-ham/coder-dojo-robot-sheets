@@ -12,14 +12,15 @@ td { padding: 0; vertical-align: top; }
 .head h1 { font-family: Bungee, Arimo, sans-serif; font-size: 30pt; font-weight: normal; text-transform: uppercase; margin: 0 0 3mm; line-height: 1.1; }
 .head .master-qr { width: 30mm; }
 .head .master-qr svg { width: 28mm; height: 28mm; display: block; margin-left: auto; }
-.tile { padding: 0 3mm 4mm 0; }
+.tile { padding: 0 2mm 3mm 0; }
+.card { background: #f3f3f3; border-radius: 4mm; padding: 2.5mm 3mm 3mm; }
 .tile-head { font-size: 15pt; }
 .tile-title { margin-right: 3mm; }
-.tile + .tile { padding-left: 3mm; padding-right: 0; }
+.tile + .tile { padding-left: 2mm; padding-right: 0; }
 .tile > a { font-size: 10pt; display: block; margin-bottom: 1.5mm; }
 .peppers .off { filter: grayscale(1); opacity: .45; }
 .peppers img.emoji { height: .9em; width: .9em; }
-.tile-body .qr { width: 38mm; text-align: right; }
-.tile-body .qr svg { width: 35mm; height: 35mm; display: block; margin-left: auto; }
+.tile-body .qr { width: 37mm; }
+.tile-body .qr svg { width: 33mm; height: 33mm; display: block; }
 .tile-body .pics { white-space: nowrap; }
-.tile-body .pics img { height: 35mm; margin-right: 2.5mm; vertical-align: top; }
+.tile-body .pics img { height: 33mm; margin-right: 2.5mm; vertical-align: top; }
