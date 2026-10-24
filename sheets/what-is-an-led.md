@@ -4,10 +4,9 @@ difficulty: 2
 language: MicroPython
 requires: Laptop with Python, Thonny and a Robot kit
 version: "1.0"
-link: https://tinyurl.com/dojo-what-is-an-led
+link: https://orionrobots.co.uk/dojo/led
 pdf_link: https://drive.google.com/file/d/1OB-jCAx7PjnKGWfU4E43ljIoachvfbAD/view  # the published PDF in the shared drive
 hero: [led-digital-io-status.png]
-qr: dojo-what-is-an-led-qr.png
 ---
 The robot has lots of little lights, known as LEDs (light emitting diodes). How can we light one up? Or light them all up?
 
@@ -85,7 +84,7 @@ We can now say an LED has a purpose, maybe for saying we need a banana?
 
 ## Step 3 - Try some different LEDs
 
-Our robot has many controllable LEDs. Lets try a different LED number:
+Our robot has many controllable LEDs. Let’s try a different LED number:
 
 :::: side-right
 ::: text
