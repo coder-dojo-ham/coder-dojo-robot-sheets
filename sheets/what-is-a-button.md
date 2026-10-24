@@ -5,7 +5,7 @@ language: MicroPython
 requires: Laptop with Thonny and a Robot
 version: "1.0"
 link: https://orionrobots.co.uk/dojo/button
-pdf_link:
+pdf_link: https://drive.google.com/file/d/15gzrvQxV9wEEc4268Vl9PKX2HNs3sEYj/view  # the published PDF in the shared drive
 hero: [buttons-board.png]
 ---
 Your robot has two user buttons. We can use them to let the user control the robot.
@@ -87,22 +87,22 @@ banana_button = Pin(21, Pin.IN)
 
 while True:
     if strawberry_button.value() == 0:
-        print("Strawberries")
+        print("Strawberries!")
     if banana_button.value() == 0:
-        print("Bananas")
+        print("Bananas!")
     sleep(0.1)
 ```
 
 Run this, and you should be able to get the code to print bananas or strawberries. Perhaps you can press both at the same time and make a smoothie?
 
 ```text
-Strawberries
-Strawberries
-Bananas
-Bananas
-Bananas
-Strawberries
-Bananas
+Strawberries!
+Strawberries!
+Bananas!
+Bananas!
+Bananas!
+Strawberries!
+Bananas!
 ```
 
 Could you make it print something else?
@@ -113,7 +113,7 @@ Could you change the names we’ve given the buttons to match?
 
 We can have pins for buttons, and pins for LEDs. Let’s try that now:
 
-```python {note="4|Pin|Input pins for buttons;7|Pin|Output pins for LEDs;11|0|Test for a press;12|value|Set the LED to match"}
+```python {note="4|Pin&IN|INput pins for buttons;7|Pin&OUT|OUTput pins for LEDs;11|0|^Test if a button<br>was pressed;12|value|Set the LED value<br>to the result"}
 from time import sleep
 from machine import Pin
 
@@ -137,7 +137,7 @@ This code is doing a test of a button being pressed, and passing that result str
 
 We could add a smoothie LED for when both are pressed:
 
-```python {hl="9,18,19" note="9|Pin|Adding another LED;18|and|“and” checks both;19|value|Use it to set the LED"}
+```python {hl="9,18,19" note="9|Pin&OUT|Adding another LED;18|and|^“and” lets us<br>check that both<br>are pressed;19|value|We can use that<br>result to set<br>an LED"}
 from time import sleep
 from machine import Pin
 

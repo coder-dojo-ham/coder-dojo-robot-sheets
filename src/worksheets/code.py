@@ -3,7 +3,9 @@
 Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **-0.7**"}:
   hl    comma separated 1-based lines to tint (the lines the kid should change/add)
   note  ';'-separated "line|token|label": boxes `token` on that line and hangs a label off it;
-        the token can be whitespace (e.g. 4 spaces to flag an indent), the label may use <br>
+        the token can be whitespace (e.g. 4 spaces to flag an indent), the label may use <br>;
+        join tokens with '&' to box several on one line (e.g. "Pin&IN"); start the label with '^'
+        to grow it upwards, so it can sit beside a blank line instead of colliding with the next label
   tone  "error" prints the block in red, like a Thonny traceback
 Use ```pycon for a REPL session: the `>>>` prompt is styled like Thonny's.
 """
@@ -91,8 +93,9 @@ def render_code(code, lang, info="", inline=lambda s: s):
     for spec in filter(None, attrs.get("note", "").split(";")):
         no, token, label = spec.split("|", 2)
         no = int(no)
-        if not _mark(lines[no - 1], token):
-            raise ValueError(f"note token {token!r} not on line {no}: {lines[no - 1]}")
+        for part in token.split("&"):
+            if not _mark(lines[no - 1], part):
+                raise ValueError(f"note token {part!r} not on line {no}: {lines[no - 1]}")
         notes[no] = label
 
     widest = max(len("".join(t for _, t in runs)) for runs in lines)
@@ -103,13 +106,16 @@ def render_code(code, lang, info="", inline=lambda s: s):
         if n in notes:
             # leader runs from the end of this line's text to the label, which sits past the block
             gap_pt = (widest - len("".join(t for _, t in runs))) * FONT_PT * ADVANCE
-            note = (f'<span class="note">'
+            up = notes[n].startswith("^")
+            label = notes[n].lstrip("^")
+            note = (f'<span class="note{" up" if up else ""}">'
                     f'<span class="leader" style="left:calc(-{gap_pt:.1f}pt - {3 - LEADER_GAP_MM}mm);'
-                    f'width:calc({gap_pt:.1f}pt + {14 - LEADER_GAP_MM}mm)"></span>{inline(notes[n])}</span>')
+                    f'width:calc({gap_pt:.1f}pt + {14 - LEADER_GAP_MM}mm)"></span>{inline(label)}</span>')
         rows.append(f'<span class="{cls}">{_runs_html(runs) or "&#8203;"}{note}</span>')
     cls = "code noted" if notes else "code"
     # a label with <br> runs below its line; reserve that room so it can't hit what follows
-    spill = max((no + notes[no].count("<br>") - len(lines) for no in notes), default=0)
+    spill = max((no + notes[no].count("<br>") - len(lines) for no in notes if notes[no][0] != "^"),
+                default=0)
     style = f' style="margin-bottom:calc(4mm + {spill * FONT_PT * 1.12:.1f}pt)"' if spill > 0 else ""
     if attrs.get("tone") == "error":
         cls += " err"
