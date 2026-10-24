@@ -14,7 +14,7 @@ tiles:
     difficulty: 2
     images: [led-digital-io-status.png]
   - title: Playing with buttons
-    link: https://tinyurl.com/playing-with-buttons
+    link: https://orionrobots.co.uk/dojo/button
     difficulty: 3
     images: [buttons-board.png]
   - title: Drive a robot
