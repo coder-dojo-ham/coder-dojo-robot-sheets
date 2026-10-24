@@ -9,7 +9,7 @@ td { padding: 0; vertical-align: top; }
 .head .logo { width: 72mm; vertical-align: middle; }
 .head .logo img { width: 66mm; }
 .head .title { text-align: center; vertical-align: middle; font-size: 13pt; }
-.head h1 { font-size: 30pt; font-weight: bold; text-transform: uppercase; margin: 0 0 3mm; line-height: 1.1; }
+.head h1 { font-family: Bungee, Arimo, sans-serif; font-size: 30pt; font-weight: normal; text-transform: uppercase; margin: 0 0 3mm; line-height: 1.1; }
 .head .master-qr { width: 30mm; }
 .head .master-qr svg { width: 28mm; height: 28mm; display: block; margin-left: auto; }
 .tile { padding: 0 3mm 4mm 0; }

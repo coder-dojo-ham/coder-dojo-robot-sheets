@@ -16,6 +16,8 @@ FAMILIES = {
                     [("Regular", {"wdth": 100, "wght": 400}),
                      ("Bold", {"wdth": 100, "wght": 700})]),
 }
+# family -> upstream file, for fonts that already ship as a single static file
+STATIC = {"Bungee": "bungee/Bungee-Regular.ttf"}
 
 
 def _download(rel_path, dest):
@@ -39,6 +41,10 @@ def ensure_fonts():
                 instantiateVariableFont(font, axes, inplace=True)
                 font.save(static)
             out[(family, style)] = static
+    for family, upstream in STATIC.items():
+        static = FONTS / f"{family}-Regular.ttf"
+        _download(upstream, static)
+        out[(family, "Regular")] = static
     return out
 
 
