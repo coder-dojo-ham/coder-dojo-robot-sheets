@@ -137,7 +137,7 @@ This code is doing a test of a button being pressed, and passing that result str
 
 We could add a smoothie LED for when both are pressed:
 
-```python {hl="9,18,19" note="9|Pin&OUT|Adding another LED;18|and|^“and” lets us<br>check that both<br>are pressed;19|value|We can use that<br>result to set<br>an LED"}
+```python {hl="9,18,19" note="9|Pin&OUT|Adding another LED;18|and|^1“and” lets us<br>check that both<br>are pressed;19|value|_1We can use that<br>result to set<br>an LED"}
 from time import sleep
 from machine import Pin
 

@@ -45,7 +45,7 @@ on the line above a heading to keep it flowing.
 | REPL session (Thonny-style `>>>`) | ` ```pycon ` fence |
 | Error text in red | ` ```text {tone="error"} ` |
 | Tint changed lines | ` ```python {hl="2,3"} ` |
-| Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated) |
+| Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated); join tokens with `&` (`Pin&IN`); label prefix `^` grows it upward, `^N`/`_N` moves it N lines up/down with an angled leader |
 | Tip / warning box | `::: tip` / `::: warning` ... `:::` |
 | Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` puts the figure on the right; used in What is an LED) |
 | Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/robot_diagram.py` |

@@ -58,8 +58,9 @@ img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
               margin-left: 3mm; font-family: Arimo; font-size: 11pt; color: #000; }
 /* leader: starts at the end of the code text (width set inline), crosses the padding to the label */
 .code .note .leader { position: absolute; top: .62em; height: 0; border-top: 1px solid #000; }
-.code .note.up { top: auto; bottom: 1pt; }
-.code .note.up .leader { top: auto; bottom: .6em; }
+.code .note.up { top: auto; }
+.code .note.up .leader { top: auto; }
+.code .note .leader { transform-origin: 0 0; }
 .code.err, .code.err .ln { color: #f00; background: none; padding-left: 0; }
 .code.noted { margin-right: 70mm; }
 img.emoji + img.emoji { margin-left: .12em; }
