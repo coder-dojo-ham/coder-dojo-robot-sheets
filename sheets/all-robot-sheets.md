@@ -27,5 +27,5 @@ tiles:
   - title: Avoiding obstacles!
     link: https://tinyurl.com/robot-obstacle-avoiding
     difficulty: 4
-    images: [obstacles-ultrasonic.png, obstacles-arena.png]
+    images: [obstacles-ultrasonic.png, obstacles-arena-closeup.png]
 ---
