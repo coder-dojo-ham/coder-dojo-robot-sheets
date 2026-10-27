@@ -21,7 +21,8 @@ MENU, MENU_SIZE = "thonny-files-src/context-menu.png", (458, 450)
 
 # Thonny window: x range kept (both file panels plus the left of the editor and Shell, for context) and the two
 # row bands. The blank part of the left column between the upper list and the lower panel header is dropped
-# ("cut and shut") so the lists stay full size; the join is marked with a dashed line.
+# ("cut and shut") so the lists stay full size. The join is deliberately not marked: both halves are blank at the
+# seam, and the reader doesn't need to know the window was shortened.
 PANEL_X = (4, 520)
 UPPER_ROWS = (152, 492)
 LOWER_ROWS = (742, 1258)  # starts above the Shell tab so its first lines stay in view
@@ -70,8 +71,6 @@ def left_panel():
     parts = [header(width, height),
              crop(WINDOW, WINDOW_SIZE, (px0, UPPER_ROWS[0], px1, UPPER_ROWS[1]), (0, 0)),
              crop(WINDOW, WINDOW_SIZE, (px0, LOWER_ROWS[0], px1, LOWER_ROWS[1]), (0, upper_h))]
-    parts.append(f'<line x1="0" y1="{upper_h}" x2="{PANEL_W}" y2="{upper_h}" stroke="#888" stroke-width="2" '
-                 'stroke-dasharray="8 6"/>')
     for text, src_y in LABELS:
         y = row(src_y)
         parts.append(f'<text x="{LABEL_X}" y="{y + LABEL_PX / 3}" font-size="{LABEL_PX}" '
