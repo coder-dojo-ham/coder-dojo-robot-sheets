@@ -57,4 +57,4 @@ on the line above a heading to keep it flowing.
 Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `robot_diagram.py` (SVG
 robots), `markup.py` (markdown -> HTML), `page.py` (cover furniture), `worksheet.css` (all styling), `verify.py`, `build.py`.
 
-Asset prep that is more than a crop is a script in `scripts/` (e.g. `prepare_thonny_panels.py`: crops, cut-and-shut), always rebuilt from the original so it can be re-run when a better source turns up.
+Asset prep that is more than a crop is a script in `scripts/` (e.g. `compose_thonny_panels.py`: crops the original screenshots, cut-and-shut, vector labels/arrows/outlines), always rebuilt from the original so it can be re-run when a better source turns up. Originals extracted from Google Docs drawings come from `scripts/gdocs/` (see its README).

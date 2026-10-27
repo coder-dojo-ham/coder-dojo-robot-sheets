@@ -133,10 +133,10 @@ Thonny has panels for managing files, both on your computer and on the robot:
 
 :::: split
 ::: fig
-![Thonny file panels: files on your computer and files on the robot](thonny-files-left.png){style="width:88mm"}
+![Thonny file panels: files on your computer and files on the robot](thonny-files-left.png){style="width:100mm"}
 :::
 ::: fig
-![The right-click menu with Upload to / and Rename](thonny-files-right.png){style="width:78mm"}
+![The right-click menu with Upload to / and Rename](thonny-files-right.png){style="width:66mm"}
 :::
 ::::
 
