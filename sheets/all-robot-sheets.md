@@ -22,7 +22,7 @@ tiles:
     difficulty: 3
     images: [drive-wheel.png, drive-square-path.png]
   - title: Following lines
-    link: https://tinyurl.com/robot-line-follow
+    link: https://orionrobots.co.uk/dojo/line-follow
     difficulty: 4
     images: [line-sensor.png, line-robot-on-track.png]
   - title: Avoiding obstacles

@@ -5,7 +5,7 @@ language: Python
 requires: Laptop with Python, Thonny or Mu, Robot kit
 version: "1.1"
 link: https://orionrobots.co.uk/dojo/line-follow
-pdf_link:  # the published PDF in the shared drive (paste the Drive share link once)
+pdf_link: https://drive.google.com/file/d/1ZISvVXBvOEpCu8rUh5q7j10Me3O__4gG/view  # the published PDF in the shared drive
 hero: [hero-maker-line-sensor.png, hero-robot-on-line.png]
 ---
 Robots can use their sensors to respond to their environment. The sensor under the robot can “see” a line using infra-red light 👀. Using the line sensor, the robot can follow a thick line drawn on the floor.
