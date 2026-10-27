@@ -48,6 +48,7 @@ on the line above a heading to keep it flowing.
 | Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated); join tokens with `&` (`Pin&IN`); label prefix `^` grows it upward, `^N`/`_N` moves it N lines up/down with an angled leader |
 | Tip / warning box | `::: tip` / `::: warning` ... `:::` |
 | Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` puts the figure on the right; used in What is an LED) |
+| Two figures, left and right margin | `:::: split` containing two `::: fig` (the second sits flush right); used for the Thonny panels in Following lines |
 | Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/robot_diagram.py` |
 | Image from `assets/` | `![alt](file.png){style="width:60mm"}` |
 | Short list after a heading stays on one page | automatic (`h2 + ul` is `break-inside: avoid`) |
@@ -55,3 +56,5 @@ on the line above a heading to keep it flowing.
 
 Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `robot_diagram.py` (SVG
 robots), `markup.py` (markdown -> HTML), `page.py` (cover furniture), `worksheet.css` (all styling), `verify.py`, `build.py`.
+
+Asset prep that is more than a crop is a script in `scripts/` (e.g. `prepare_thonny_panels.py`: crops, cut-and-shut), always rebuilt from the original so it can be re-run when a better source turns up.

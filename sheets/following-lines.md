@@ -3,7 +3,7 @@ title: Following lines
 difficulty: 4
 language: Python
 requires: Laptop with Python, Thonny or Mu, Robot kit
-version: "1.0"
+version: "1.1"
 link: https://orionrobots.co.uk/dojo/line-follow
 pdf_link:  # the published PDF in the shared drive (paste the Drive share link once)
 hero: [hero-maker-line-sensor.png, hero-robot-on-line.png]
@@ -70,7 +70,7 @@ A high number means the sensor is left, a lower means it’s right.
 
 The sensor is connected on Pin 27, which we set up as an Input. It’s then turned into an ADC - Analog data converter. That allows one pin to measure a varying input level.
 
-The while loop reads this data, as a u16 - a number between 0 and 65535 (2 to the power of 16 minus 1), prints it and sleeps a little time.
+The while loop reads this data, as a `u16` - a number between 0 and 65535 (2 to the power of 16 minus 1), prints it and sleeps a little time.
 
 ::::: side-right
 ::: text
@@ -131,20 +131,25 @@ Running code in Thonny is fine when the robot is connected, but after testing yo
 
 Thonny has panels for managing files, both on your computer and on the robot:
 
-![Thonny file panels, and the right-click menu with Upload to / and Rename](thonny-files-panels.png){style="width:132mm"}
+:::: split
+::: fig
+![Thonny file panels: files on your computer and files on the robot](thonny-files-left.png){style="width:88mm"}
+:::
+::: fig
+![The right-click menu with Upload to / and Rename](thonny-files-right.png){style="width:78mm"}
+:::
+::::
 
 First, in the files on your computer, you need to rename the file to “main.py”. Right click on the file to rename or make a copy.\
 Right click the new named file, and use “Upload to /” to put it on the robot.
 
 You can now **turn off the robot** and unplug it.
 
-::: warning
-⚠️ **Important!** Always test code with the run button before replacing main.py with it.
-:::
+{{> warn-test-run}}
 
 Put the robot on a test sheet on the floor, and turn it on. It should follow this. If it’s working, try it on a line-following track.
 
-This code tracks the middle of the line as 2**15 - or 2 to the power of 15 - this is half of the u16 range.
+This code tracks the middle of the line as 2**15 - or 2 to the power of 15 - this is half of the `u16` range.
 
 The loop is in a `try/finally` block to ensure the motors stop if there are any problems.
 

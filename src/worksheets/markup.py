@@ -12,8 +12,8 @@ from .robot_diagram import render_robot
 
 INCLUDE = re.compile(r"^\{\{>\s*([\w-]+)((?:\s+\w+=\S+)*)\s*\}\}\s*$", re.MULTILINE)
 ARG = re.compile(r"(\w+)=(\S+)")
-# ::: names and the CSS class each renders to. fig/text only make sense inside side/side-right.
-CONTAINERS = ("tip", "warning", "side", "side-right", "fig", "text")
+# ::: names and the CSS class each renders to. fig/text only make sense inside side/side-right/split.
+CONTAINERS = ("tip", "warning", "side", "side-right", "split", "fig", "text")
 
 
 def expand_snippets(source, _depth=0):

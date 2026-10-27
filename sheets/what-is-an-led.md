@@ -3,7 +3,7 @@ title: Playing with LEDs
 difficulty: 2
 language: MicroPython
 requires: Laptop with Python, Thonny and a Robot kit
-version: "1.0"
+version: "1.1"
 link: https://orionrobots.co.uk/dojo/led
 pdf_link: https://drive.google.com/file/d/1OB-jCAx7PjnKGWfU4E43ljIoachvfbAD/view  # the published PDF in the shared drive
 hero: [led-digital-io-status.png]

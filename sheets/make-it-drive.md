@@ -3,7 +3,7 @@ title: Drive a robot
 difficulty: 3
 language: MicroPython
 requires: Laptop with Thonny and a Robot
-version: "1.0"
+version: "1.1"
 link: https://orionrobots.co.uk/dojo/driving
 pdf_link: https://drive.google.com/file/d/1_aQZ4OTaQi4755W07Y7ElXY6j0I0Vjzl/view  # the published PDF in the shared drive
 hero: [robot-wheel-closeup.png, square-path.png]

@@ -3,7 +3,7 @@ title: Playing with buttons
 difficulty: 3
 language: MicroPython
 requires: Laptop with Thonny and a Robot
-version: "1.0"
+version: "1.1"
 link: https://orionrobots.co.uk/dojo/button
 pdf_link: https://drive.google.com/file/d/15gzrvQxV9wEEc4268Vl9PKX2HNs3sEYj/view  # the published PDF in the shared drive
 hero: [buttons-board.png]
