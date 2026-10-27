@@ -5,6 +5,7 @@ language: MicroPython
 requires: Laptop with Thonny and a Robot
 version: "1.1"
 link: https://orionrobots.co.uk/dojo/obstacles
+pdf_link: https://drive.google.com/file/d/1Qa1zQxD-eVhmJGW7Cc5yrJgFLwUlNRDs/view  # the published PDF in the shared drive
 hero: [hero-ultrasonic-sensors.png, hero-test-arena.png]
 ---
 The robots can’t see the way we see 👀, they see with a couple of distance sensors. We can use them to drive around the world without bumping into things 🦺⛑️.

@@ -26,7 +26,7 @@ tiles:
     difficulty: 4
     images: [line-sensor.png, line-robot-on-track.png]
   - title: Avoiding obstacles
-    link: https://tinyurl.com/robot-obstacle-avoiding
+    link: https://orionrobots.co.uk/dojo/obstacles
     difficulty: 4
     images: [obstacles-ultrasonic.png, obstacles-arena-closeup.png]
 ---
