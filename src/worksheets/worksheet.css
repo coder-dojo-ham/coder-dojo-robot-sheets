@@ -16,6 +16,8 @@ h2.step, h2.checkpoint { break-before: page; margin-top: 0; }
 h2.nobreak { break-before: auto; margin-top: 7mm; }
 h3 { font-size: 14pt; font-weight: normal; color: #666; margin: 5mm 0 2mm; break-after: avoid; }
 ul, ol { margin: 0 0 3.2mm; padding-left: 9mm; }
+/* keep a heading's short list together so a lone bullet is not stranded on the next page */
+h2 + ul { break-inside: avoid; }
 li { margin-bottom: 1.2mm; }
 code { font-family: Inconsolata, monospace; font-size: 11pt; color: #444; }
 strong code, code strong { font-weight: bold; color: #000; }

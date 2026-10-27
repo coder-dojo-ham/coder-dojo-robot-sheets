@@ -50,6 +50,7 @@ on the line above a heading to keep it flowing.
 | Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` puts the figure on the right; used in What is an LED) |
 | Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/robot_diagram.py` |
 | Image from `assets/` | `![alt](file.png){style="width:60mm"}` |
+| Short list after a heading stays on one page | automatic (`h2 + ul` is `break-inside: avoid`) |
 | Reusable snippet | `{{> warn-stand}}` includes `snippets/warn-stand.md` (`{{> name key=value}}` fills `{{key}}`) |
 
 Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `robot_diagram.py` (SVG
