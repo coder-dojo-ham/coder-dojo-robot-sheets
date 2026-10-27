@@ -2,7 +2,7 @@
 
 Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **-0.7**"}:
   hl    comma separated 1-based lines to tint (the lines the kid should change/add)
-  note  ';'-separated "line|token|label": boxes `token` on that line and hangs a label off it;
+  note  ';'-separated "line|token|label" (a line may have several): boxes `token` on that line and hangs a label off it;
         the token can be whitespace (e.g. 4 spaces to flag an indent), the label may use <br>;
         join tokens with '&' to box several on one line (e.g. "Pin&IN"); start the label with '^'
         to grow it upwards, so it can sit beside a blank line instead of colliding with the next label.
@@ -112,32 +112,32 @@ def render_code(code, lang, info="", inline=lambda s: s):
         for part in token.split("&"):
             if not _mark(lines[no - 1], part):
                 raise ValueError(f"note token {part!r} not on line {no}: {lines[no - 1]}")
-        notes[no] = label
+        notes.setdefault(no, []).append(label)
 
     widest = max(len("".join(t for _, t in runs)) for runs in lines)
     rows = []
     for n, runs in enumerate(lines, 1):
         cls = "ln hl" if n in hl else "ln"
         note = ""
-        if n in notes:
+        for label in notes.get(n, []):
             # leader runs from the end of this line's text to the label, which sits past the block;
             # a shifted label tilts it, so it is rotated about its start and lengthened to match
-            text, up, shift = _split_label(notes[n])
+            text, up, shift = _split_label(label)
             gap_pt = (widest - len("".join(t for _, t in runs))) * FONT_PT * ADVANCE
             run_pt = gap_pt + LEADER_LEN_MM * PT_PER_MM
             angle = math.degrees(math.atan2(shift, run_pt))
             length = math.hypot(run_pt, shift)
             anchor = f"bottom:calc(.6em + {shift:.1f}pt)" if up else f"top:calc(.62em - {shift:.1f}pt)"
             place = f"bottom:calc(1pt - {shift:.1f}pt)" if up else f"top:{shift:.1f}pt"
-            note = (f'<span class="note{" up" if up else ""}" style="{place}">'
+            note += (f'<span class="note{" up" if up else ""}" style="{place}">'
                     f'<span class="leader" style="left:calc(-{gap_pt:.1f}pt - {3 - LEADER_GAP_MM}mm);'
                     f'{anchor};width:{length:.1f}pt;transform:rotate({angle:.2f}deg)"></span>'
                     f'{inline(text)}</span>')
         rows.append(f'<span class="{cls}">{_runs_html(runs) or "&#8203;"}{note}</span>')
     cls = "code noted" if notes else "code"
     # a label with <br> runs below its line; reserve that room so it can't hit what follows
-    spill = max((no + notes[no].count("<br>") + math.ceil(max(_split_label(notes[no])[2], 0) / LINE_PT)
-                 - len(lines) for no in notes if not _split_label(notes[no])[1]), default=0)
+    spill = max((no + label.count("<br>") + math.ceil(max(_split_label(label)[2], 0) / LINE_PT) - len(lines)
+                 for no, labels in notes.items() for label in labels if not _split_label(label)[1]), default=0)
     style = f' style="margin-bottom:calc(4mm + {spill * FONT_PT * 1.12:.1f}pt)"' if spill > 0 else ""
     if attrs.get("tone") == "error":
         cls += " err"
