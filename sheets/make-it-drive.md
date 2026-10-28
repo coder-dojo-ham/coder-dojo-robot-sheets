@@ -429,7 +429,7 @@ Gentler curves can be made by having different values. If one motor drives a lit
 
 Let’s modify the code to do this:
 
-```python {note="5|1|Change to **1**;6|0.5|Change to **-0.5**"}
+```python {note="5|1|^0.6Change to **1**;6|0.5|_0.6Change to **-0.5**"}
 import motors
 import time
 
