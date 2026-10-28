@@ -25,6 +25,21 @@ PANELS = [
 ]
 
 
+# Arrows match the Following lines figures (compose_thonny_panels.py): a thin black line and a small head, not the
+# Docs drawing's thick pink highlighter stroke. Widths are in drawing units, where one source pixel is ~3.5 units.
+ARROW_WIDTH = 11
+ARROW_COLOUR = "#000"
+ARROW_HEAD = 7  # head size, in stroke widths (as in compose_thonny_panels.py)
+
+
+def restyle_arrows(svg_text):
+    svg_text = re.sub(r'(<line [^>]*?)stroke="#[0-9a-f]+" stroke-width="[\d.]+"',
+                      rf'\1stroke="{ARROW_COLOUR}" stroke-width="{ARROW_WIDTH}"', svg_text)
+    head = (f'<marker id="head42" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="{ARROW_HEAD}" '
+            f'markerHeight="{ARROW_HEAD}" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>')
+    return re.sub(r'<marker id="head42".*?</marker>', head, svg_text, flags=re.S)
+
+
 def crop(svg_text, x, y, w, h):
     svg_text = re.sub(r'viewBox="[^"]*"', f'viewBox="{x} {y} {w} {h}"', svg_text, count=1)
     svg_text = re.sub(r'width="[\d.]+in"', f'width="{w / UNITS_PER_INCH:.4f}in"', svg_text, count=1)
@@ -33,7 +48,7 @@ def crop(svg_text, x, y, w, h):
 
 def main():
     src_dir = SRC / "thonny-plotter-src"
-    svg_text = (src_dir / "drawing.svg").read_text()
+    svg_text = restyle_arrows((src_dir / "drawing.svg").read_text())
     for name, x, y, w, h in PANELS:
         cropped = src_dir / f"{name}.svg"  # beside the picture so its relative link resolves
         cropped.write_text(crop(svg_text, x, y, w, h))
