@@ -58,7 +58,7 @@ img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
 .code .hl { background: #fff2c2; margin: 0 -3mm; padding: 0 3mm; }
 .code .kw { color: #8b0056; font-weight: bold; } .code .fn { color: #000080; font-weight: bold; }
 .code .num { color: #c1580b; font-weight: bold; } .code .cm { color: #777; } .code .st { color: #067d17; }
-.code .mark { background: #fff; outline: 1.5px solid #fff; }
+.code .mark { background: #fff; box-shadow: 0 0 0 1.5px #fff; }
 .code .note { position: absolute; left: 100%; top: 0; white-space: nowrap; padding-left: 12mm;
               margin-left: 3mm; font-family: Arimo; font-size: 11pt; color: #000; }
 /* the label itself sits in a bordered box so neighbouring callouts read as separate; the 12mm of padding is the leader's run */

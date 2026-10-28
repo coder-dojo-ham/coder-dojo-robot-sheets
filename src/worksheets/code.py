@@ -86,8 +86,22 @@ def _mark(runs, token):
 
 
 def _runs_html(runs):
-    return "".join(
-        f'<span class="{c}">{html.escape(t)}</span>' if c else html.escape(t) for c, t in runs)
+    """Adjacent `mark` runs share one wrapper so the box is a single rectangle, not seamed pieces."""
+    def span(c, t):
+        return f'<span class="{c}">{html.escape(t)}</span>' if c else html.escape(t)
+
+    out, group = [], []
+    for c, t in runs:
+        if c.split()[-1:] == ["mark"]:
+            group.append(span(c.removesuffix("mark").strip(), t))
+            continue
+        if group:
+            out.append(f'<span class="mark">{"".join(group)}</span>')
+            group = []
+        out.append(span(c, t))
+    if group:
+        out.append(f'<span class="mark">{"".join(group)}</span>')
+    return "".join(out)
 
 
 def _split_label(label):
