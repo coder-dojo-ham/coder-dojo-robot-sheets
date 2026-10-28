@@ -61,51 +61,26 @@ def _block_arrow(pts):
             f'fill="{ORANGE}" {OUTLINE}/>')
 
 
-# Curved arrows are drawn at full size, then fitted between the motors (x 120..180, y 95..203).
-GAP_CX, GAP_CY, GAP_W = 150, 149, 50
-PATH_SHAFT = 13
+# Curved arrows are anchored on the middle of the robot: halfway between the wheel axles (y 127).
+MID_X, MID_Y = 150, 127
 
 
-def _fitted(cmds, head):
-    """cmds: ('M'|'L', x, y) / ('A', r, x, y) / ('Q', cx, cy, x, y) in full-size coords; head: triangle.
-    -> (scaled path d, scaled head points), centred in the gap and `GAP_W` wide."""
-    path_xs = [x for c in cmds for x in c[1::2] if c[0] != "A"]
-    ys = [y for c in cmds for y in c[2::2] if c[0] != "A"] + [y for _, y in head]
-    head_xs = [x for x, _ in head]
-    # the shaft's own half-thickness sticks out beyond its centre line, by a fixed size not a scaled one,
-    # so solve for the scale iteratively
-    k, pad = 1.0, PATH_SHAFT / 2 + 1.3
-    for _ in range(8):
-        lo = min(min(path_xs) - pad / k, min(head_xs))
-        hi = max(max(path_xs) + pad / k, max(head_xs))
-        k = GAP_W / (hi - lo)
-    cx, cy = (hi + lo) / 2, (max(ys) + min(ys)) / 2
+def _arc_arrow(d, d_under, head, shaft):
+    """Curved arrow: black underlay, orange shaft on top, triangular head.
 
-    def pt(x, y):
-        return GAP_CX + (x - cx) * k, GAP_CY + (y - cy) * k
-
-    parts = []
-    for c in cmds:
-        if c[0] == "A":
-            x, y = pt(*c[2:])
-            parts.append(f"A{c[1] * k:.2f},{c[1] * k:.2f} 0 0 1 {x:.2f},{y:.2f}")
-        else:
-            coords = [pt(*c[i:i + 2]) for i in range(1, len(c), 2)]
-            parts.append(c[0] + " ".join(f"{x:.2f},{y:.2f}" for x, y in coords))
-    return " ".join(parts), [pt(x, y) for x, y in head]
-
-
-def _path_arrow(cmds, head):
-    """Thick curved arrow: black underlay, orange on top, triangular head.
-
-    The underlay starts one outline-width before the orange so the shaft base is outlined too."""
-    d, head = _fitted(cmds, head)
-    first = d.split(" ", 1)
-    x, y = (float(v) for v in first[0][1:].split(","))
-    under = f"M{x:.2f},{y + 1.3:.2f} {first[1]}"
-    return (f'<path d="{under}" fill="none" stroke="#000" stroke-width="{PATH_SHAFT + 2.6}" stroke-linejoin="round"/>'
-            f'<path d="{d}" fill="none" stroke="{ORANGE}" stroke-width="{PATH_SHAFT}"/>'
+    `d_under` starts one outline-width before `d` so the shaft base is outlined too."""
+    return (f'<path d="{d_under}" fill="none" stroke="#000" stroke-width="{shaft + 2.6}"/>'
+            f'<path d="{d}" fill="none" stroke="{ORANGE}" stroke-width="{shaft}"/>'
             f'<polygon points="{" ".join(f"{x:.2f},{y:.2f}" for x, y in head)}" fill="{ORANGE}" {OUTLINE}/>')
+
+
+def _head(base, tangent, half_width, length):
+    """Triangle whose base is centred on `base` and whose tip lies along unit `tangent`."""
+    nx, ny = -tangent[1], tangent[0]
+    bx, by = base
+    return [(bx + nx * half_width, by + ny * half_width),
+            (bx + tangent[0] * length, by + tangent[1] * length),
+            (bx - nx * half_width, by - ny * half_width)]
 
 
 SPIN_R, SPIN_SHAFT, SPIN_HEAD_W, SPIN_HEAD_LEN = 17, 9, 10.5, 13
@@ -116,26 +91,45 @@ def _spin_arrow():
     """Nearly-full clockwise circle in the gap between the motors, with a tangent head at the end."""
     def at(deg, r=SPIN_R):
         a = math.radians(deg)
-        return GAP_CX + r * math.sin(a), GAP_CY - r * math.cos(a)
+        return MID_X + r * math.sin(a), MID_Y - r * math.cos(a)
 
     end = SPIN_START + SPIN_SWEEP
     a = math.radians(end)
-    tangent, outward = (math.cos(a), math.sin(a)), (math.sin(a), -math.cos(a))
     bx, by = at(end)
-    head = [(bx + outward[0] * SPIN_HEAD_W, by + outward[1] * SPIN_HEAD_W),
-            (bx + tangent[0] * SPIN_HEAD_LEN, by + tangent[1] * SPIN_HEAD_LEN),
-            (bx - outward[0] * SPIN_HEAD_W, by - outward[1] * SPIN_HEAD_W)]
+    head = _head((bx, by), (math.cos(a), math.sin(a)), SPIN_HEAD_W, SPIN_HEAD_LEN)
 
     def arc(start_deg):
         x0, y0 = at(start_deg)
-        x1, y1 = bx, by
-        return f"M{x0:.2f},{y0:.2f} A{SPIN_R},{SPIN_R} 0 1 1 {x1:.2f},{y1:.2f}"
+        return f"M{x0:.2f},{y0:.2f} A{SPIN_R},{SPIN_R} 0 1 1 {bx:.2f},{by:.2f}"
 
-    # underlay starts one outline-width earlier so the shaft base is outlined
-    under = arc(SPIN_START - math.degrees(1.3 / SPIN_R))
-    return (f'<path d="{under}" fill="none" stroke="#000" stroke-width="{SPIN_SHAFT + 2.6}"/>'
-            f'<path d="{arc(SPIN_START)}" fill="none" stroke="{ORANGE}" stroke-width="{SPIN_SHAFT}"/>'
-            f'<polygon points="{" ".join(f"{x:.2f},{y:.2f}" for x, y in head)}" fill="{ORANGE}" {OUTLINE}/>')
+    return _arc_arrow(arc(SPIN_START), arc(SPIN_START - math.degrees(1.3 / SPIN_R)), head, SPIN_SHAFT)
+
+
+# Gentle left curve: an arc of a vertical ellipse (taller than wide) that starts at the robot's middle
+# heading straight up and turns CURVE_TURN degrees on its way out of the front, so there is no straight
+# run in the shaft.
+CURVE_RX, CURVE_RY, CURVE_TURN, CURVE_SHAFT = 90, 130, 30, 15
+CURVE_HEAD_W, CURVE_HEAD_LEN = 14, 24
+
+
+def _curve_left_arrow():
+    # heading from vertical at parameter t is atan((rx sin t) / (ry cos t))
+    t = math.atan(math.tan(math.radians(CURVE_TURN)) * CURVE_RY / CURVE_RX)
+
+    def at(u):
+        return MID_X - CURVE_RX + CURVE_RX * math.cos(u), MID_Y - CURVE_RY * math.sin(u)
+
+    end = at(t)
+    tangent = (-CURVE_RX * math.sin(t), -CURVE_RY * math.cos(t))
+    norm = math.hypot(*tangent)
+    head = _head(end, (tangent[0] / norm, tangent[1] / norm), CURVE_HEAD_W, CURVE_HEAD_LEN)
+
+    def arc(u0):
+        x0, y0 = at(u0)
+        return f"M{x0:.2f},{y0:.2f} A{CURVE_RX},{CURVE_RY} 0 0 0 {end[0]:.2f},{end[1]:.2f}"
+
+    # the underlay starts one outline-width earlier so the shaft base is outlined
+    return _arc_arrow(arc(0), arc(-1.3 / CURVE_RY), head, CURVE_SHAFT)
 
 
 BIG_ARROWS = {
@@ -147,9 +141,7 @@ BIG_ARROWS = {
     "backward": lambda: _block_arrow(
         [(128, 96), (128, 190), (104, 190), (150, 245), (196, 190), (172, 190), (172, 96)]),
     "spin": lambda: _spin_arrow(),
-    "curve-left": lambda: _path_arrow(
-        [("M", 205, 190), ("L", 205, 130), ("Q", 205, 72, 150, 72)],
-        [(150, 42), (150, 102), (100, 72)]),
+    "curve-left": lambda: _curve_left_arrow(),
 }
 
 
