@@ -1,4 +1,4 @@
-"""Where things live. Code is in git; documents (assets, PDFs) are in Nextcloud."""
+"""Where things live. Code and sheet assets are in git; built PDFs go to Nextcloud."""
 import os
 from pathlib import Path
 
@@ -11,7 +11,7 @@ CACHE = REPO / ".cache"
 NEXTCLOUD = Path(os.environ.get(
     "WORKSHEETS_NEXTCLOUD",
     Path.home() / "nextcloud/1-Areas/Orionrobots - coderdojo/robots-worksheets"))
-ASSETS = NEXTCLOUD / "assets"
+ASSETS = REPO / "assets"
 OUTPUT = NEXTCLOUD / "sheets"
 
 # assets/<sheet>/ holds a sheet's own images; assets/ itself holds ones shared between sheets.

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6693.3 3653.1" width="6.6933in" height="3.6531in">
+<defs><marker id="head42" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="125.1" markerHeight="125.1" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10z"/></marker></defs>
+<clipPath id="clip0"><rect x="0" y="0" width="6693.3" height="3653.1"/></clipPath><image href="1000020100000780000004144533D9E9BADC0F8B.png" x="0" y="0" width="6693.3" height="3639.5" clip-path="url(#clip0)"/>
+<text x="1689.8" y="256" font-size="88.7" font-family="Arial, sans-serif" fill="#000000">1. Click on the view menu</text>
+<line x1="1587.8" y1="180.7" x2="567.3" y2="207.5" stroke="#ea9999" stroke-width="41.7" marker-end="url(#head42)"/>
+<text x="2445.3" y="1865.1" font-size="88.7" font-family="Arial, sans-serif" fill="#000000">2. Ensure plotter is ticked</text>
+<line x1="2343.3" y1="1789.8" x2="1322.8" y2="1816.6" stroke="#ea9999" stroke-width="41.7" marker-end="url(#head42)"/>
+<text x="4835.4" y="1978.5" font-size="88.7" font-family="Arial, sans-serif" fill="#000000">3. A plot of the two sensors</text>
+<line x1="5418.5" y1="2138.2" x2="5244.5" y2="3040.6" stroke="#ea9999" stroke-width="41.7" marker-end="url(#head42)"/>
+</svg>

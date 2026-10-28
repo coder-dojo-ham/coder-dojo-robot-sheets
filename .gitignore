@@ -5,3 +5,10 @@ fonts/
 .cache/
 out/
 .env
+
+# assets rendered by scripts/ from the committed sources (needs playwright); see README "Generated assets"
+assets/avoiding-obstacles/ping-pong.*
+assets/avoiding-obstacles/thonny-plotter-menu.png
+assets/avoiding-obstacles/thonny-plotter-plot.png
+assets/following-lines/thonny-files-left.*
+assets/following-lines/thonny-files-right.*

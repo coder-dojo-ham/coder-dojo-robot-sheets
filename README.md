@@ -2,8 +2,9 @@
 
 Builds CoderDojo robot worksheet PDFs from markdown sheets and reusable snippets - no Google Docs.
 
-- Sheets and assets (documents): `~/nextcloud/1-Areas/Orionrobots - coderdojo/robots-worksheets/`
-  (`assets/<sheet>/` in for a sheet's own images, `assets/` for ones shared between sheets; `sheets/` PDFs out; `examples/` holds the old Google Docs PDF exports to match)
+- Sheet sources: `sheets/`. Images are in `assets/` (`assets/<sheet>/` for a sheet's own, `assets/` for ones shared between sheets).
+- Built PDFs go to `sheets/` under `WORKSHEETS_NEXTCLOUD` (default `~/nextcloud/1-Areas/Orionrobots - coderdojo/robots-worksheets`;
+  set the env var to put them elsewhere)
 - Notes / area router: `orionrobots_memories/20-areas/coderdojo/`; project log:
   `orionrobots_memories/10-projects/2026-10-11-coderdojo-worksheet-framework/`
 - Older work to gather in: `coder_dojo_robots`, `coder-dojo-worksheets`, `coder-dojo-worksheets2` (inside the Nextcloud coderdojo area; embedded git repos, see the memories migration project)
@@ -58,3 +59,19 @@ Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting
 robots), `markup.py` (markdown -> HTML), `page.py` (cover furniture), `worksheet.css` (all styling), `verify.py`, `build.py`.
 
 Asset prep that is more than a crop is a script in `scripts/` (e.g. `compose_thonny_panels.py`: crops the original screenshots, cut-and-shut, vector labels/arrows/outlines), always rebuilt from the original so it can be re-run when a better source turns up. Originals extracted from Google Docs drawings come from `scripts/gdocs/` (see its README).
+
+## Generated assets
+
+Most images are committed. A few are drawn or rendered by scripts from committed sources, so they are git-ignored; run
+these once after a fresh clone (each is idempotent; they need `playwright`, then `playwright install chromium`):
+
+```bash
+uv run python scripts/draw_ping_pong.py assets/avoiding-obstacles/ping-pong.svg   # then render it to ping-pong.png with scripts/gdocs/render_svg.py
+uv run --with playwright python scripts/crop_thonny_plotter.py
+uv run --with playwright python scripts/compose_thonny_panels.py assets/following-lines
+```
+
+## Licence
+
+MIT - see [LICENSE](LICENSE). Covers the code, the worksheets and the images in `assets/` (my own screenshots,
+drawings and SVGs, and the CoderDojo KU logo).
