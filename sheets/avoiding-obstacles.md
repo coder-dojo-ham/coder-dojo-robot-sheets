@@ -66,7 +66,9 @@ When you run this, you will see the distances for the two sensors printed in the
 
 We can make it more visual with the plotter:
 
-![Thonny with the View menu open and Plotter ticked, plotting the two sensors](thonny-plotter.png){style="width:170mm"}
+![Thonny’s View menu with Plotter ticked](thonny-plotter-menu.png){style="width:130mm"}
+
+![The plot of the two sensors](thonny-plotter-plot.png){style="width:130mm"}
 
 Now we have some sensor input, how can we use it?
 

@@ -1,0 +1,45 @@
+"""Split the Obstacle avoiding Thonny drawing (Step 1) into two panels: the View menu, and the plot.
+
+Rebuilt from the original Docs drawing in assets/avoiding-obstacles/thonny-plotter-src/ (SVG + native
+screenshot, from scripts/gdocs/), so it can be re-run if a better source turns up. Each panel is the same
+SVG with its viewBox narrowed, then rendered with scripts/gdocs/render_svg.py. Idempotent.
+
+usage: uv run --with playwright python scripts/crop_thonny_plotter.py
+"""
+import re
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent / "gdocs"))
+from render_svg import main as render  # noqa: E402
+
+from worksheets.config import ASSETS  # noqa: E402
+
+SRC = ASSETS / "avoiding-obstacles"
+UNITS_PER_INCH = 1000  # the ODT-derived SVGs are in 1/1000 inch
+
+# (output name, x, y, width, height) in the drawing's units
+PANELS = [
+    ("thonny-plotter-menu", 0, 0, 3640, 2335),      # View menu + the editor, callouts 1 and 2
+    ("thonny-plotter-plot", 3380, 1900, 3313, 1753),  # plot only (the shell numbers are cut by the menu edge), callout 3
+]
+
+
+def crop(svg_text, x, y, w, h):
+    svg_text = re.sub(r'viewBox="[^"]*"', f'viewBox="{x} {y} {w} {h}"', svg_text, count=1)
+    svg_text = re.sub(r'width="[\d.]+in"', f'width="{w / UNITS_PER_INCH:.4f}in"', svg_text, count=1)
+    return re.sub(r'height="[\d.]+in"', f'height="{h / UNITS_PER_INCH:.4f}in"', svg_text, count=1)
+
+
+def main():
+    src_dir = SRC / "thonny-plotter-src"
+    svg_text = (src_dir / "drawing.svg").read_text()
+    for name, x, y, w, h in PANELS:
+        cropped = src_dir / f"{name}.svg"  # beside the picture so its relative link resolves
+        cropped.write_text(crop(svg_text, x, y, w, h))
+        render(cropped, SRC / f"{name}.png")
+        cropped.unlink()
+
+
+if __name__ == "__main__":
+    main()
