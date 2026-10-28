@@ -132,7 +132,7 @@ def render_code(code, lang, info="", inline=lambda s: s):
             note += (f'<span class="note{" up" if up else ""}" style="{place}">'
                     f'<span class="leader" style="left:calc(-{gap_pt:.1f}pt - {3 - LEADER_GAP_MM}mm);'
                     f'{anchor};width:{length:.1f}pt;transform:rotate({angle:.2f}deg)"></span>'
-                    f'{inline(text)}</span>')
+                    f'<span class="label">{inline(text)}</span></span>')
         rows.append(f'<span class="{cls}">{_runs_html(runs) or "&#8203;"}{note}</span>')
     cls = "code noted" if notes else "code"
     # a label with <br> runs below its line; reserve that room so it can't hit what follows

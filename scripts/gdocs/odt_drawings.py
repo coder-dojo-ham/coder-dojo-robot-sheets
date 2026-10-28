@@ -85,6 +85,18 @@ def picture(frame, box, props, odt_dir, out_dir, n):
             f'clip-path="url(#clip{n})"/>')
 
 
+HEADS = {}  # arrowhead marker id -> size in user units, one per stroke width
+
+
+def arrowhead(sw):
+    """Marker id for an arrowhead on a stroke `sw` wide. Thin strokes keep the classic 8x width; thick ones
+    are capped, because 8x a fat highlighter-style line is comically large."""
+    size = min(8 * sw, max(3 * sw, 80))
+    marker_id = f"head{round(sw)}"
+    HEADS[marker_id] = size
+    return marker_id
+
+
 def arrow(shape, box, props):
     geom = shape.find(q("draw:enhanced-geometry"))
     flip = geom.get(q("draw:mirror-horizontal")) == "true"
@@ -92,7 +104,7 @@ def arrow(shape, box, props):
     stroke = props.get("stroke-color", "#000000")
     sw = inches(props.get("stroke-width", "0.01in"))
     return (f'<line x1="{num(x1)}" y1="{num(box.y)}" x2="{num(x2)}" y2="{num(box.y + box.h)}" stroke="{stroke}" '
-            f'stroke-width="{num(sw)}" marker-end="url(#head)"/>')
+            f'stroke-width="{num(sw)}" marker-end="url(#{arrowhead(sw)})"/>')
 
 
 def outline(box, props):
@@ -149,6 +161,7 @@ def shape_svg(shape, box, styles, fit):
 
 
 def drawing_svg(group, styles, odt_dir, out_dir):
+    HEADS.clear()  # markers are per drawing
     parts, right, bottom = [], 0.0, 0.0
     fit = label_fit(group, styles)
     for el in group:
@@ -159,8 +172,10 @@ def drawing_svg(group, styles, odt_dir, out_dir):
             parts.append(picture(el, box, props, odt_dir, out_dir, len(parts)))
         elif el.tag == q("draw:custom-shape"):
             parts.append(shape_svg(el, box, styles, fit))
-    marker = ('<defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" '
-              'markerUnits="strokeWidth" orient="auto"><path d="M0 0L10 5L0 10z"/></marker></defs>')
+    marker = "<defs>" + "".join(
+        f'<marker id="{mid}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="{num(size)}" markerHeight="{num(size)}" '
+        'markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>'
+        for mid, size in HEADS.items()) + "</defs>"
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {num(right)} {num(bottom)}" '
             f'width="{right / U:.4f}in" height="{bottom / U:.4f}in">\n{marker}\n' + "\n".join(p for p in parts if p) + "\n</svg>\n")
 

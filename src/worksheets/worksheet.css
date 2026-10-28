@@ -61,6 +61,8 @@ img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
 .code .mark { background: #fff; outline: 1.5px solid #fff; }
 .code .note { position: absolute; left: 100%; top: 0; white-space: nowrap; padding-left: 12mm;
               margin-left: 3mm; font-family: Arimo; font-size: 11pt; color: #000; }
+/* the label itself sits in a bordered box so neighbouring callouts read as separate; the 12mm of padding is the leader's run */
+.code .note .label { display: inline-block; padding: .6mm 1.6mm; background: #fffbe6; border: .75pt solid #888; border-radius: 1mm; }
 /* leader: starts at the end of the code text (width set inline), crosses the padding to the label */
 .code .note .leader { position: absolute; top: .62em; height: 0; border-top: 1px solid #000; }
 .code .note.up { top: auto; }

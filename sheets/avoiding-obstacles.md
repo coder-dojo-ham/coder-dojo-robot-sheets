@@ -27,7 +27,7 @@ These sensors use echo-location like a bat. They “ping” an object, and recei
 
 The robots all have an `hcsr04` library on board for communicating with these sensors. Let’s test this:
 
-```python {note="2|hcsr04|^0.5A library to talk to the sensor;4|HCSR04|^1.2Objects to talk with sensors;4|trigger_pin|_0.5Trigger - pin to start a “ping”;5|echo_pin|_1.5Echo - pin to receive a “pong”;8|distance_cm|_0.5Get a distance from the sensors;10|print|Print the distances;11|sleep|_0.5Wait a bit before doing it again"}
+```python {note="2|hcsr04|^0.5A library to talk to the sensor;4|HCSR04|^1.2Objects to talk with sensors;4|trigger_pin|_0.5Trigger - pin to start a “ping”;5|echo_pin|_1.5Echo - pin to receive a “pong”;8|distance_cm|_0Get a distance<br>from the sensors;10|print|_0.9Print the distances;11|sleep|_1.7Wait a bit before<br>doing it again"}
 import time
 from hcsr04 import HCSR04
 

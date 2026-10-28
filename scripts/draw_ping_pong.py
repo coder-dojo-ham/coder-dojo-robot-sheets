@@ -27,6 +27,10 @@ def can(left, top_y, width=182, height=140):
 WAVE_SCALE = 0.8  # sound waves are drawn at this fraction of their original size
 
 
+WAVE_FIRST = 62  # radius of the innermost wavefront; ping and pong share it so the waves match
+PONG_WAVE_DISTANCE = 125  # how far down the pong arrow its waves sit, from the reflection point
+
+
 def wave_radii(first, count=4, step=25):
     """Radii of `count` wavefronts, the first at `first` from the source, spacing scaled by WAVE_SCALE."""
     return tuple(round(first + i * step * WAVE_SCALE) for i in range(count))
@@ -48,6 +52,9 @@ def wavefronts(cx, cy, heading_deg, radii, half_span_deg=42):
 def diagram():
     ping_heading = math.degrees(math.atan2(152, 400))
     pong_heading = 180 - math.degrees(math.atan2(116, 400))
+    # same arcs as ping, centred further down the pong arrow so they sit where they should
+    d = PONG_WAVE_DISTANCE - WAVE_FIRST
+    pong_wave_centre = (352 + d * math.sin(math.radians(pong_heading)), 52 - d * math.cos(math.radians(pong_heading)))
     parts = [
         f'<rect x="15" y="-5" width="675" height="52" fill="{BLUE}" stroke="{INK}" stroke-width="3"/>',
         f'<rect x="65" y="615" width="515" height="70" fill="{BLUE}" stroke="{INK}" stroke-width="3"/>',
@@ -56,8 +63,8 @@ def diagram():
         # arrows first so the wavefronts and labels sit on top
         f'<line x1="200" y1="450" x2="352" y2="52" stroke="{INK}" stroke-width="3" marker-end="url(#head)"/>',
         f'<line x1="352" y1="52" x2="468" y2="450" stroke="{INK}" stroke-width="3" marker-end="url(#head)"/>',
-        wavefronts(200, 450, ping_heading, wave_radii(62), 38),
-        wavefronts(352, 52, pong_heading, wave_radii(125, step=28), 38),
+        wavefronts(200, 450, ping_heading, wave_radii(WAVE_FIRST), 38),
+        wavefronts(*pong_wave_centre, pong_heading, wave_radii(WAVE_FIRST), 38),
         f'<text x="135" y="262" font-size="44" font-family="{FONT}">Ping!</text>',
         f'<text x="435" y="318" font-size="44" font-family="{FONT}">Pong!</text>',
     ]
