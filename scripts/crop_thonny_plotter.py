@@ -21,7 +21,7 @@ UNITS_PER_INCH = 1000  # the ODT-derived SVGs are in 1/1000 inch
 # (output name, x, y, width, height) in the drawing's units
 PANELS = [
     ("thonny-plotter-menu", 0, 0, 3640, 2335),      # View menu + the editor, callouts 1 and 2
-    ("thonny-plotter-plot", 3380, 1900, 3313, 1753),  # plot only (the shell numbers are cut by the menu edge), callout 3
+    ("thonny-plotter-plot", 3380, 1950, 3313, 1703),  # plot only (the shell numbers are cut by the menu edge), callout 3
 ]
 
 
@@ -40,6 +40,28 @@ def restyle_arrows(svg_text):
     return re.sub(r'<marker id="head42".*?</marker>', head, svg_text, flags=re.S)
 
 
+CENTRE_OF_TEXT = 0.36  # x-height centre above the baseline, in font sizes
+ABOVE_TAIL_GAP = 70  # for a label above its arrow: baseline-to-tail distance, in drawing units
+
+LABEL_AND_ARROW = re.compile(
+    r'<text x="(?P<tx>[\d.]+)" y="(?P<ty>[\d.]+)" font-size="(?P<fs>[\d.]+)"(?P<text_rest>[^>]*>[^<]*</text>\s*)'
+    r'<line x1="(?P<x1>[\d.]+)" y1="(?P<y1>[\d.]+)"(?P<line_rest>[^>]*>)')
+
+
+def align_labels(svg_text):
+    """Seat each arrow's tail on its label. A label to the right of the tail is centred on it vertically (the tail
+    moves to the text's centre); a label above the tail comes down to just above it. The tip is not touched."""
+    def fix(m):
+        tx, ty, fs, x1, y1 = (float(m[k]) for k in ("tx", "ty", "fs", "x1", "y1"))
+        if x1 < tx:
+            y1 = ty - CENTRE_OF_TEXT * fs
+        else:
+            ty = y1 - ABOVE_TAIL_GAP
+        return (f'<text x="{m["tx"]}" y="{ty:.1f}" font-size="{m["fs"]}"{m["text_rest"]}'
+                f'<line x1="{m["x1"]}" y1="{y1:.1f}"{m["line_rest"]}')
+    return LABEL_AND_ARROW.sub(fix, svg_text)
+
+
 def crop(svg_text, x, y, w, h):
     svg_text = re.sub(r'viewBox="[^"]*"', f'viewBox="{x} {y} {w} {h}"', svg_text, count=1)
     svg_text = re.sub(r'width="[\d.]+in"', f'width="{w / UNITS_PER_INCH:.4f}in"', svg_text, count=1)
@@ -48,7 +70,7 @@ def crop(svg_text, x, y, w, h):
 
 def main():
     src_dir = SRC / "thonny-plotter-src"
-    svg_text = restyle_arrows((src_dir / "drawing.svg").read_text())
+    svg_text = align_labels(restyle_arrows((src_dir / "drawing.svg").read_text()))
     for name, x, y, w, h in PANELS:
         cropped = src_dir / f"{name}.svg"  # beside the picture so its relative link resolves
         cropped.write_text(crop(svg_text, x, y, w, h))
