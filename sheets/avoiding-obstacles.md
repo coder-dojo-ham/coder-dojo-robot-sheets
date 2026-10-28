@@ -1,6 +1,6 @@
 ---
 title: Avoiding obstacles
-difficulty: 4
+difficulty: 5
 language: MicroPython
 requires: Laptop with Thonny and a Robot
 version: "1.1"
@@ -27,7 +27,7 @@ These sensors use echo-location like a bat. They “ping” an object, and recei
 
 The robots all have an `hcsr04` library on board for communicating with these sensors. Let’s test this:
 
-```python {note="2|hcsr04|A library to talk to the sensor;4|HCSR04|^1Objects to talk with sensors;4|trigger_pin|Trigger - pin to start a “ping”;5|echo_pin|Echo - pin to receive a “pong”;8|distance_cm|Get a distance from the sensors;10|print|Print the distances;11|sleep|Wait a bit before doing it again"}
+```python {note="2|hcsr04|^0.5A library to talk to the sensor;4|HCSR04|^1.2Objects to talk with sensors;4|trigger_pin|_0.5Trigger - pin to start a “ping”;5|echo_pin|_1.5Echo - pin to receive a “pong”;8|distance_cm|_0.5Get a distance from the sensors;10|print|Print the distances;11|sleep|_0.5Wait a bit before doing it again"}
 import time
 from hcsr04 import HCSR04
 
@@ -74,7 +74,7 @@ Now we have some sensor input, how can we use it?
 
 We can use this to make our robot a little smarter. We can make sure it stops before it hits an object.
 
-Let’s add motors into our imports (from <https://tinyurl.com/robot-make-it-drive>):
+Let’s add motors into our imports (from <https://orionrobots.co.uk/dojo/driving>):
 
 ```python {note="2|motors|Import the motors<br>library so we can<br>move;8|THRESHOLD|^Use these to<br>control the speed<br>and stopping<br>threshold;11|try|Use try/finally to<br>ensure it stops,<br>even with errors;17|distance_cm|Get the sensor data;21|if|If we are too close;24|break|Then break out<br>of the loop;27|finally|Stop the motors<br>here when we leave<br>the loop for any<br>reason"}
 import time

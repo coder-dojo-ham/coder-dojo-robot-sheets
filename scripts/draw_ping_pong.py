@@ -24,6 +24,14 @@ def can(left, top_y, width=182, height=140):
     )
 
 
+WAVE_SCALE = 0.8  # sound waves are drawn at this fraction of their original size
+
+
+def wave_radii(first, count=4, step=25):
+    """Radii of `count` wavefronts, the first at `first` from the source, spacing scaled by WAVE_SCALE."""
+    return tuple(round(first + i * step * WAVE_SCALE) for i in range(count))
+
+
 def wavefronts(cx, cy, heading_deg, radii, half_span_deg=42):
     """Concentric arcs around (cx, cy), centred on a heading measured clockwise from straight up."""
     paths = []
@@ -33,7 +41,7 @@ def wavefronts(cx, cy, heading_deg, radii, half_span_deg=42):
             rad = math.radians(a)
             points.append((cx + r * math.sin(rad), cy - r * math.cos(rad)))
         (x1, y1), (x2, y2) = points
-        paths.append(f'<path d="M{x1:.1f} {y1:.1f} A{r} {r} 0 0 1 {x2:.1f} {y2:.1f}" fill="none" stroke="{INK}" stroke-width="6"/>')
+        paths.append(f'<path d="M{x1:.1f} {y1:.1f} A{r} {r} 0 0 1 {x2:.1f} {y2:.1f}" fill="none" stroke="{INK}" stroke-width="5"/>')
     return "".join(paths)
 
 
@@ -48,8 +56,8 @@ def diagram():
         # arrows first so the wavefronts and labels sit on top
         f'<line x1="200" y1="450" x2="352" y2="52" stroke="{INK}" stroke-width="3" marker-end="url(#head)"/>',
         f'<line x1="352" y1="52" x2="468" y2="450" stroke="{INK}" stroke-width="3" marker-end="url(#head)"/>',
-        wavefronts(200, 450, ping_heading, (70, 95, 120, 145), 38),
-        wavefronts(352, 52, pong_heading, (100, 128, 156, 184), 38),
+        wavefronts(200, 450, ping_heading, wave_radii(62), 38),
+        wavefronts(352, 52, pong_heading, wave_radii(125, step=28), 38),
         f'<text x="135" y="262" font-size="44" font-family="{FONT}">Ping!</text>',
         f'<text x="435" y="318" font-size="44" font-family="{FONT}">Pong!</text>',
     ]
