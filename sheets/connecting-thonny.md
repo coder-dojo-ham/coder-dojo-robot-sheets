@@ -5,7 +5,7 @@ language: MicroPython
 requires: Laptop with Thonny and a Robot
 version: "1.1"
 link: https://orionrobots.co.uk/dojo/thonny
-pdf_link:  # the published PDF in the shared drive; paste its share link here once
+pdf_link: https://drive.google.com/file/d/17jP2cvMQIRG5ZUo4uXjmtOCUoOoJHCdj/view  # the published PDF in the shared drive
 hero: [hero-thonny.png, hero-robot.jpg]
 ---
 In this sheet, you’ll see how to get started with your robot by connecting to it, writing some code, and getting the robot to run it.
