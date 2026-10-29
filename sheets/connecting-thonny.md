@@ -35,7 +35,7 @@ You may see Thonny looks like this:
 If you see this, click the “Switch to regular mode” text on the right, click OK, then close Thonny and open it again. Thonny should now look like the screen above.
 
 {.newpage}
-## Enable files and shell
+### Enable files and shell
 
 :::: side-right
 ::: text
