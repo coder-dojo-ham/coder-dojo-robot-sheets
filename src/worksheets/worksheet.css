@@ -14,6 +14,7 @@ h1 { font-size: 26pt; font-weight: normal; margin: 0; line-height: 1.1; }
 h2 { font-size: 20pt; font-weight: normal; margin: 7mm 0 3mm; line-height: 1.1; break-after: avoid; }
 h2.step, h2.checkpoint { break-before: page; margin-top: 0; }
 h2.nobreak { break-before: auto; margin-top: 7mm; }
+h2.newpage { break-before: page; margin-top: 0; }
 h3 { font-size: 14pt; font-weight: normal; color: #666; margin: 5mm 0 2mm; break-after: avoid; }
 ul, ol { margin: 0 0 3.2mm; padding-left: 9mm; }
 /* keep a heading's short list together so a lone bullet is not stranded on the next page */

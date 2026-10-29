@@ -39,7 +39,7 @@ checked by the build. Change a tile's `link` when its `/dojo/...` short link goe
 `sheets/<name>.md`: YAML front matter (title, difficulty 1-5, language, requires, version, link, hero
 images from `assets/`, `pdf_link` = the PDF's Drive share link, pasted once; it stays valid when `publish-sheets` overwrites the file), intro text up to `<!-- /intro -->` (sits beside the QR), the rest of the cover
 page up to the first `## `, then steps. `## Step N` / `## Checkpoint` start a new page; put `{.nobreak}`
-on the line above a heading to keep it flowing.
+on the line above a heading to keep it flowing, or `{.newpage}` to start a plain `##` heading on a new page.
 
 | Feature | Markdown |
 | --- | --- |
