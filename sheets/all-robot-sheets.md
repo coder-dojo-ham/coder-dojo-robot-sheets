@@ -6,7 +6,7 @@ link: https://orionrobots.co.uk/dojo/robots
 pdf_link: https://drive.google.com/file/d/1BPNRxx34n33ixOSQBJCupcuo004ed8UX/view  # the published PDF in the shared drive
 tiles:
   - title: Connecting Thonny to a robot
-    link: https://tinyurl.com/robot-thonny
+    link: https://orionrobots.co.uk/dojo/thonny
     difficulty: 2
     images: [thonny-screenshot.png, thonny-robot-top.png]
   - title: Playing with LEDs
