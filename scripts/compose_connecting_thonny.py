@@ -37,6 +37,8 @@ FIGURES = {
     "thonny-pick-interpreter": (6, (0, 6250, 5930.3, 3489)),  # drops the blank canvas above the label
     "thonny-connected": (7, (0, 0, 2922.4, 3009.8)),  # the window only; its output snippets are code blocks in the sheet
 }
+# figures shown larger than the doc had them: shrink their label text by the same factor so captions keep their size
+LABEL_SHRINK = {"thonny-connected": 64 / 84}  # printed 64mm in the doc's layout, 84mm in the sheet
 # picture that is a plain-black line drawing, traced to a vector (picture name -> trace threshold)
 TRACED = {"100002010000058F000004790E84FCF353565544.png": 140}
 # pictures outside any drawing, copied as-is: ODT picture -> asset name (hero images are downsized)
@@ -131,6 +133,11 @@ def banner_svg():
             'stroke-width="4" stroke-dasharray="14 10"/></svg>')
 
 
+def shrink_labels(svg, factor):
+    """Scale every label's font size and line step (the leaders and pictures stay put)."""
+    return re.sub(r'(font-size|dy)="([\d.]+)"', lambda m: f'{m.group(1)}="{float(m.group(2)) * factor:.1f}"', svg)
+
+
 def figure(name, svg, box, work):
     for pic, threshold in TRACED.items():
         if pic in svg:
@@ -139,6 +146,8 @@ def figure(name, svg, box, work):
             svg = svg.replace(f"pictures/{pic}", traced.as_uri())
     svg = svg.replace('href="pictures/', f'href="{PICTURES.as_uri()}/')
     svg = svg.replace("<defs>", f'<style>@font-face {{ font-family: Arimo; src: url("{FONT.as_uri()}"); }}</style><defs>', 1)
+    if name in LABEL_SHRINK:
+        svg = shrink_labels(svg, LABEL_SHRINK[name])
     if box:
         svg = crop(svg, box)
     page = work / f"{name}.svg"

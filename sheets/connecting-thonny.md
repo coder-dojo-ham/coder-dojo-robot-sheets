@@ -80,10 +80,10 @@ We will be writing our own code, so ignore code that is already on the robot. Th
 
 :::: side
 ::: fig
-![Thonny connected to the robot, with the Stop button and Shell panel marked](thonny-connected.png){style="width:64mm"}
+![Thonny connected to the robot, with the Stop button and Shell panel marked](thonny-connected.png){style="width:84mm"}
 :::
 ::: text
-**This shows you are connected to the robot**
+**If you see this, you are connected**
 
 ```pycon
 MicroPython v1.24.1 on 2024-11-29;
@@ -92,7 +92,7 @@ Type "help()" for more information.
 >>>
 ```
 
-**Need to select the RP2040 again**
+**If you see this, select the RP2040 again**
 
 ```text {tone="error"}
 Unable to connect to COM13:
@@ -101,7 +101,7 @@ port not found
 Process ended with exit code 1.
 ```
 
-**Press Stop**
+**If you see this, press Stop**
 
 ```text {tone="error"}
 Connection lost -- EOF
