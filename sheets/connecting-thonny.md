@@ -28,6 +28,8 @@ Launch Thonny. You should see the following:
 
 ![Thonny’s window: menu, play and stop buttons, file list, code editor, shell panel and Python choice menu](thonny-window-labelled.png){style="width:120mm"}
 
+### Help, the menu is missing
+
 You may see Thonny looks like this:
 
 ![Thonny’s simple mode toolbar, with “Switch to regular mode” on the right](thonny-regular-mode.png){style="width:150mm"}
