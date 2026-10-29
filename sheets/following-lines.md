@@ -39,7 +39,7 @@ The sensor needs to be configured for the line we’ll put it on. It can either 
 
 The sensor needs you to “teach” it how the light and dark light levels look on the test area. This is also called “calibration”
 
-Put the robot on its stand and turn the robot on, it may have driving code on it. Replace the `main.py` on the robot with the LED flashing demo from <https://orionrobots.co.uk/dojo/thonny>.
+Put the robot on its stand and turn the robot on, it may have driving code on it. Replace the `main.py` on the robot with the LED flashing demo from <https://orionrobots.co.uk/dojo/led>.
 
 Now, the robot shouldn’t try to drive when you turn it on. Put it on a line following sheet instead of its stand, and the sensor should be lit up, and may already be responding to the line. It may also be not-quite detecting the line.
 
