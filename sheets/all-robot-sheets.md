@@ -1,7 +1,6 @@
 ---
 title: Python robots
 layout: overview
-# tinyurl links stay until a sheet gets its own orionrobots.co.uk/dojo/... redirect (see the project log)
 link: https://orionrobots.co.uk/dojo/robots
 pdf_link: https://drive.google.com/file/d/1BPNRxx34n33ixOSQBJCupcuo004ed8UX/view  # the published PDF in the shared drive
 tiles:
