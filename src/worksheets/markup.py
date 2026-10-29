@@ -51,12 +51,20 @@ def _render_image(self, tokens, idx, options, env):
     return self.renderToken(tokens, idx, options, env)
 
 
+def _is_figure(tokens, i):
+    """A code fence, or a paragraph holding nothing but an image, starts at tokens[i]."""
+    if tokens[i].type == "fence":
+        return True
+    return (tokens[i].type == "paragraph_open" and tokens[i + 1].children
+            and all(c.type == "image" for c in tokens[i + 1].children))
+
+
 def _mark_lead_ins(state):
-    """Class `lead` on any paragraph directly followed by a code fence (see .lead in page.py)."""
+    """Class `lead` on any paragraph directly followed by a code fence or a lone image (see .lead in page.py)."""
     tokens = state.tokens
-    for i in range(len(tokens) - 3):
+    for i in range(len(tokens) - 4):
         if (tokens[i].type == "paragraph_open" and tokens[i + 2].type == "paragraph_close"
-                and tokens[i + 3].type == "fence"):
+                and _is_figure(tokens, i + 3)):
             tokens[i].attrJoin("class", "lead")
 
 

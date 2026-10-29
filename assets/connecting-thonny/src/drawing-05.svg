@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5930.7 6085.8" width="5.9307in" height="6.0858in">
+<defs><marker id="head42" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="125.1" markerHeight="125.1" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10z"/></marker></defs>
+<clipPath id="clip0"><rect x="0" y="0" width="5930.3" height="6085.8"/></clipPath><image href="pictures/10000201000004E80000050C52734259C7FAAB8E.png" x="0" y="0" width="5930.3" height="6100.3" clip-path="url(#clip0)"/>
+<clipPath id="clip1"><rect x="2660.2" y="4954.3" width="3270.5" height="1131.5"/></clipPath><image href="pictures/10000201000004E80000050C52734259C7FAAB8E.png" x="-6039.5" y="-6225.4" width="11970.2" height="12313.3" clip-path="url(#clip1)"/>
+<line x1="2850" y1="4792.5" x2="5685.8" y2="5892.9" stroke="#ff0000" stroke-width="41.7" marker-end="url(#head42)"/>
+<rect x="2063.8" y="4319.3" width="1407.1" height="424.8" fill="#ffffff" fill-opacity="0.36"/><text x="2163.8" y="4588.5" font-size="169.2" font-family="Arimo, Arial, sans-serif" fill="#000000"><tspan x="2163.8" dy="0">1. Click here</tspan></text>
+</svg>

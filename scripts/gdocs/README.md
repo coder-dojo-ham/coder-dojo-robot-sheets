@@ -16,8 +16,8 @@ uv run --with playwright python scripts/gdocs/render_svg.py /tmp/doc-drawings/dr
 
 Each `draw:g` group in the ODT is one drawing. Known limits:
 
-- Shapes handled: text boxes, straight arrows, rectangle/rounded-rectangle outlines. Anything else is reported on stderr.
-- Label font size is a heuristic (see `label_fit`): the ODT keeps the unscaled size, so labels are shrunk to fit their boxes.
+- Shapes handled: text boxes (word-wrapped in Arimo, with their translucent backing), straight arrows, solid and dashed rectangle/rounded-rectangle outlines, straight leader lines ending in a dot (`ooxml-non-primitive`). Anything else is reported on stderr.
+- Label font size: the ODT keeps the unscaled size; measured against the PDF exports Docs shows it at 0.87x (`LABEL_SCALE`), shrunk further only if a word would overflow its box.
 - Picture crops (`fo:clip`) are read as inches at 96 dpi against the picture's natural size (verified on the Step 4 drawing).
 - Pictures that are *not* inside a drawing group are plain images; take them straight from the ODT `Pictures/`.
 
@@ -26,7 +26,7 @@ Each `draw:g` group in the ODT is one drawing. Known limits:
 | Doc | Drawings | Notes |
 |---|---|---|
 | Robots - line follow (`1h-EPddi...`) | 1 | Step 4 Thonny panels -> `scripts/compose_thonny_panels.py` |
-| Getting started (`1W--JNVv...`) | 7 | Thonny screenshots at 1256x1292 / 1650x1668 (best source of crisp panels); shapes: freeform ("non-primitive") + rounded rects not yet converted |
+| Getting started (`1W--JNVvecCNKrG0rvP7Tk4qM3g7Hqwm3xGXwyfmynQg`) | 7 | Thonny screenshots at 1256x1292 / 1650x1668. **Converted 2026-10-29** into the Connecting Thonny sheet by `scripts/compose_connecting_thonny.py` (all shapes handled) |
 | Make it drive (`1Cuq-YQTU...`) | 9 | mostly vector-only diagrams (square path, arrows, flowchart shapes) - many unconverted shapes |
 | Button (`131hjjhB...`) | 6 | small pictures + labels + one curved connector (unconverted) |
 | LED (`1tN4cISq...`) | 2 | one right-arrow shape unconverted |

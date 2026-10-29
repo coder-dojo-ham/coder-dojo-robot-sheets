@@ -4,6 +4,8 @@ Destination comes from GDRIVE_WORKSHEETS_DIR (environment or the git-ignored .en
 .env.example). It may be a path on this machine (a mount) or, on WSL where the drive is only
 mounted on the Windows side, a Windows path such as G:\\My Drive\\...: those go via powershell.exe.
 Copying is idempotent: existing files are overwritten with the same content.
+With sheet names as arguments (`publish-sheets connecting-thonny`) only those PDFs are copied, so a sheet
+can go out without re-publishing others that have local changes nobody has reviewed yet.
 """
 import os
 import re
@@ -60,9 +62,11 @@ def copy_via_powershell(pdfs, dest):
 
 
 def main():
-    pdfs = sorted(OUTPUT.glob("*.pdf"))
-    if not pdfs:
-        sys.exit(f"no PDFs in {OUTPUT}; run build-sheet first")
+    names = sys.argv[1:]
+    pdfs = [OUTPUT / f"{name}.pdf" for name in names] if names else sorted(OUTPUT.glob("*.pdf"))
+    missing = [p for p in pdfs if not p.exists()]
+    if missing or not pdfs:
+        sys.exit(f"no PDF for {', '.join(p.name for p in missing) or 'anything'} in {OUTPUT}; run build-sheet first")
     dest = destination()
     # a mounted/local path wins; otherwise a Windows-style path is handed to powershell
     if Path(dest).is_dir() or not WINDOWS_PATH.match(dest):

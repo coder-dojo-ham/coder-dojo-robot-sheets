@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4260.6 4166.6" width="4.2606in" height="4.1666in">
+<defs><marker id="head42" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="125.1" markerHeight="125.1" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L10 5L0 10z"/></marker></defs>
+<clipPath id="clip0"><rect x="0" y="0" width="4260.6" height="3738.6"/></clipPath><image href="pictures/1000000000000671000006B25FC1D271884DDA14.jpg" x="0" y="-345.3" width="4260.6" height="4428.5" clip-path="url(#clip0)"/>
+<text x="711" y="4008.2" font-size="169.2" font-family="Arimo, Arial, sans-serif" fill="#000000"><tspan x="711" dy="0">Power switch and USB Connector</tspan></text>
+<rect x="1397.2" y="1428.3" width="1705.1" height="801.2" rx="133.5" fill="none" stroke="#ff0000" stroke-width="83.5" stroke-dasharray="334 250.5"/>
+<rect x="2041.7" y="573.6" width="1631.5" height="870.5" fill="#efefef" fill-opacity="0.77"/><text x="2141.7" y="842.8" font-size="169.2" font-family="Arimo, Arial, sans-serif" fill="#000000"><tspan x="2141.7" dy="0">USB Programming</tspan><tspan x="2141.7" dy="194.5">Cable</tspan></text>
+<rect x="1014.6" y="2229.9" width="1116.9" height="563" rx="93.8" fill="none" stroke="#ff0000" stroke-width="83.5" stroke-dasharray="334 250.5"/>
+<rect x="2131.9" y="3005.5" width="1630.7" height="423.2" fill="#efefef" fill-opacity="0.77"/><text x="2231.9" y="3274.7" font-size="169.2" font-family="Arimo, Arial, sans-serif" fill="#000000"><tspan x="2231.9" dy="0">On/Off switch</tspan></text>
+<line x1="2857.1" y1="1136.6" x2="2250" y2="1427.9" stroke="#d9d9d9" stroke-width="41.7" marker-end="url(#head42)"/>
+<line x1="0" y1="0" x2="815" y2="493.3" stroke="#d9d9d9" stroke-width="41.7" marker-end="url(#head42)"/>
+</svg>

@@ -21,6 +21,7 @@ Copy the built PDFs to the shared CoderDojo KU Google Drive `Worksheets/` folder
 ```bash
 cp .env.example .env        # once per machine; set GDRIVE_WORKSHEETS_DIR (git-ignored)
 uv run publish-sheets       # mounted path, or a Windows G:\... path via powershell.exe on WSL
+uv run publish-sheets connecting-thonny   # only the named sheets (others may hold unreviewed local changes)
 ```
 
 Fonts (Arimo, Inconsolata) and emoji PNGs are fetched on first run into `fonts/` and `.cache/`
@@ -53,12 +54,13 @@ on the line above a heading to keep it flowing.
 | Robot diagram | ` ```robot ` fence, YAML - see `src/worksheets/robot_diagram.py` |
 | Image from `assets/` | `![alt](file.png){style="width:60mm"}` |
 | Short list after a heading stays on one page | automatic (`h2 + ul` is `break-inside: avoid`) |
+| A paragraph before a code block or lone image stays on its page with it | automatic (`p.lead`); add `{.lead}` on the line above to force it |
 | Reusable snippet | `{{> warn-stand}}` includes `snippets/warn-stand.md` (`{{> name key=value}}` fills `{{key}}`) |
 
 Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `robot_diagram.py` (SVG
 robots), `markup.py` (markdown -> HTML), `page.py` (cover furniture), `worksheet.css` (all styling), `verify.py`, `build.py`.
 
-Asset prep that is more than a crop is a script in `scripts/` (e.g. `compose_thonny_panels.py`: crops the original screenshots, cut-and-shut, vector labels/arrows/outlines), always rebuilt from the original so it can be re-run when a better source turns up. Originals extracted from Google Docs drawings come from `scripts/gdocs/` (see its README).
+Asset prep that is more than a crop is a script in `scripts/` (e.g. `compose_thonny_panels.py`: crops the original screenshots, cut-and-shut, vector labels/arrows/outlines), always rebuilt from the original so it can be re-run when a better source turns up. Originals extracted from Google Docs drawings come from `scripts/gdocs/` (see its README). `compose_connecting_thonny.py` renders a whole sheet's figures from the committed drawing SVGs and pictures in `assets/connecting-thonny/src/` (vector labels, arrows and dashed outlines over the original screenshots; the robot stand line drawing is traced to a vector); `stage` mode refreshes those sources from `scripts/gdocs/` output.
 
 ## Generated assets
 
@@ -69,6 +71,7 @@ these once after a fresh clone (each is idempotent; they need `playwright`, then
 uv run python scripts/draw_ping_pong.py assets/avoiding-obstacles/ping-pong.svg   # then render it to ping-pong.png with scripts/gdocs/render_svg.py
 uv run --with playwright python scripts/crop_thonny_plotter.py
 uv run --with playwright python scripts/compose_thonny_panels.py assets/following-lines
+uv run --with playwright --with potracer --with numpy python scripts/compose_connecting_thonny.py   # assets/connecting-thonny/*.png
 ```
 
 ## Licence
