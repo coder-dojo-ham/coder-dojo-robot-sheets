@@ -40,10 +40,11 @@ FIGURES = {
 # picture that is a plain-black line drawing, traced to a vector (picture name -> trace threshold)
 TRACED = {"100002010000058F000004790E84FCF353565544.png": 140}
 # pictures outside any drawing, copied as-is: ODT picture -> asset name (hero images are downsized)
-FLAT = {
-    "1000020100000112": "thonny-view-menu.png",
-    "10000201000004390000": "thonny-regular-mode.png",
-}
+FLAT = {"1000020100000112": "thonny-view-menu.png"}
+# the simple-mode toolbar picture, kept as a source; the figure adds a red outline round its "Switch to regular mode" link
+BANNER = "10000201000004390000006A1E411A1F9538F4DB.png"
+BANNER_SIZE, BANNER_LINK = (1081, 106), (1004, 16, 1088, 88)  # picture px; outline box x0, y0, x1, y1 (runs past the edge)
+BANNER_MARGIN = 14  # canvas added at the right so the outline is not cut off; the picture's last pixel column is stretched into it
 # the doc crops some plain pictures (fo:clip); keep the same box (left, top, right, bottom) in source pixels
 CROPS = {"thonny-view-menu.png": (0, 0, 274, 322)}  # View menu: the doc hides everything below Shell
 HEROES = {"10000201000006790000": "hero-thonny.png", "100000000000070300000800": "hero-robot.jpg"}
@@ -54,6 +55,7 @@ def stage(odt_dir, drawings_dir):
     """Copy the converter's output into src/: pictures once, drawing svgs pointing at them."""
     odt_dir, drawings_dir = Path(odt_dir), Path(drawings_dir)
     PICTURES.mkdir(parents=True, exist_ok=True)
+    shutil.copy(odt_dir / "Pictures" / BANNER, PICTURES / BANNER)
     for pic in (odt_dir / "Pictures").iterdir():
         for prefix, name in {**FLAT, **HEROES}.items():
             if pic.name.startswith(prefix):
@@ -116,8 +118,20 @@ def crop(svg, box):
     return svg
 
 
-def figure(name, number, box, work):
-    svg = (SRC / f"drawing-{number:02d}.svg").read_text()
+def banner_svg():
+    """The simple-mode toolbar with a dashed red outline round the link to click (picture px, 96 per inch)."""
+    w, h = BANNER_SIZE
+    x0, y0, x1, y1 = BANNER_LINK
+    total = w + BANNER_MARGIN
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {total} {h}" width="{total / 96}in" height="{h / 96}in">'
+            f'<svg x="{w}" width="{BANNER_MARGIN}" height="{h}" viewBox="{w - 1} 0 1 {h}" preserveAspectRatio="none">'
+            f'<image href="pictures/{BANNER}" width="{w}" height="{h}"/></svg>'
+            f'<image href="pictures/{BANNER}" width="{w}" height="{h}"/>'
+            f'<rect x="{x0}" y="{y0}" width="{x1 - x0}" height="{y1 - y0}" rx="6" fill="none" stroke="#ff0000" '
+            'stroke-width="4" stroke-dasharray="14 10"/></svg>')
+
+
+def figure(name, svg, box, work):
     for pic, threshold in TRACED.items():
         if pic in svg:
             traced = work / (Path(pic).stem + ".svg")
@@ -137,8 +151,9 @@ def main(*args):
     if args and args[0] == "stage":
         stage(*args[1:3])
     with tempfile.TemporaryDirectory() as tmp:
+        figure("thonny-regular-mode", banner_svg(), None, Path(tmp))
         for name, (number, box) in FIGURES.items():
-            figure(name, number, box, Path(tmp))
+            figure(name, (SRC / f"drawing-{number:02d}.svg").read_text(), box, Path(tmp))
 
 
 if __name__ == "__main__":
