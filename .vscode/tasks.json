@@ -1,0 +1,33 @@
+{
+  // Run with Ctrl+Shift+P > "Tasks: Run Task". The "current sheet" tasks use the sheet open in the editor.
+  // Build writes the PDF to Nextcloud and page PNG previews to .cache/previews/<sheet>/.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build current sheet (preview)",
+      "type": "shell",
+      "command": "uv run build-sheet ${file}",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Build and publish current sheet",
+      "type": "shell",
+      "command": "uv run build-sheet ${file} && uv run publish-sheets ${fileBasenameNoExtension}",
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Build all sheets (no publish)",
+      "type": "shell",
+      "command": "scripts/republish-all.sh --build-only",
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Republish all sheets",
+      "type": "shell",
+      "command": "scripts/republish-all.sh",
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "shared" }
+    }
+  ]
+}

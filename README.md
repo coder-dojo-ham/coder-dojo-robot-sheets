@@ -24,6 +24,10 @@ uv run publish-sheets       # mounted path, or a Windows G:\... path via powersh
 uv run publish-sheets connecting-thonny   # only the named sheets (others may hold unreviewed local changes)
 ```
 
+In VS Code (Ctrl+Shift+P > Tasks: Run Task; the default build task is Ctrl+Shift+B), `.vscode/tasks.json` has:
+**Build current sheet (preview)**, **Build and publish current sheet**, **Build all sheets (no publish)** and
+**Republish all sheets** (`scripts/republish-all.sh [--build-only]`: builds every sheet, then publishes all PDFs, retrying the occasional empty-glob failure).
+
 Fonts (Arimo, Inconsolata) and emoji PNGs are fetched on first run into `fonts/` and `.cache/`
 (both git-ignored). Page PNG previews land in `.cache/previews/<sheet>/` and the build fails if the QR
 doesn't decode to the sheet link or the pinned fonts aren't embedded.
