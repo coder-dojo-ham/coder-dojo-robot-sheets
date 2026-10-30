@@ -136,7 +136,7 @@ Hello, robot!
 
 :::: side-right
 ::: text
-Your robot is connected and running code, so why not make its lights flash? 💡 Try the **Playing with LEDs** sheet next. Scan the QR code, or go to:
+Your robot is connected and running code, so why not make its lights flash? 💡 Try the **Playing with LEDs** sheet next. Ask a mentor for a printed copy (we usually have some at the events), or scan the QR code, or go to:
 
 <https://orionrobots.co.uk/dojo/led>
 :::
