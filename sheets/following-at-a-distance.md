@@ -80,6 +80,8 @@ class Controller:
 
 This makes a `Controller` class and a `SET_POINT` instead of a threshold. This is a bit closer at 10cm.
 
+This is **proportional** control: the bigger the gap, the bigger the response.
+
 Let’s make the rest of the code use it - update the numbered lines:
 
 ```python {note="11|left_gap|Get the gap<br>between where<br>we are and<br>the set point;15|left_speed|Use the gap to<br>get a speed for<br>each motor;19|set_speed|Set the motor<br>speeds"}
@@ -112,6 +114,7 @@ When you run this, the robot should try to get about 30 cm from something held i
 
 Our motor control goes between 1 and -1, we usually want smaller speeds than all the way, and at less than 10cm we should slow down. So 1/10 or 0.1 is a reasonable maximum. But much lower makes it a smoother response.
 
+{.nobreak}
 ## Step 3 - Keeping pace!
 
 If you walk, it will jump to follow, but it isn’t keeping pace. We can add an **integral** so it can correct for small constant changes like someone walking away from it.\
