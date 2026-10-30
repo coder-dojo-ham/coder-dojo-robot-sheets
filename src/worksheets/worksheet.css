@@ -33,6 +33,8 @@ img.emoji { height: 1.05em; width: 1.05em; vertical-align: -0.15em; }
 .intro .qr { display: table-cell; width: 38mm; vertical-align: top; }
 .intro .qr svg, .intro .qr img { width: 36mm; height: 36mm; }
 .intro .qr img { image-rendering: pixelated; }
+.qr-inline { display: inline-block; }
+.qr-inline svg { display: block; width: 100%; height: auto; }
 .intro .text { display: table-cell; vertical-align: top; padding-left: 5mm; font-size: 10.5pt; }
 .link { margin-top: 8mm; font-size: 10pt; }
 .link a { color: #1155cc; }

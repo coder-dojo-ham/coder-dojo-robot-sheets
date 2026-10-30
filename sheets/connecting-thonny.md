@@ -131,3 +131,16 @@ Press enter, and it will run this and respond:
 Hello, robot!
 >>>
 ```
+
+## What next?
+
+:::: side-right
+::: text
+Your robot is connected and running code, so why not make its lights flash? 💡 Try the **Playing with LEDs** sheet next. Scan the QR code, or go to:
+
+<https://orionrobots.co.uk/dojo/led>
+:::
+::: fig
+![Scan to open the Playing with LEDs sheet](qr:https://orionrobots.co.uk/dojo/led){style="width:36mm"}
+:::
+::::

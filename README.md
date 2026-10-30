@@ -59,6 +59,7 @@ on the line above a heading to keep it flowing, or `{.newpage}` to start any oth
 | Image from `assets/` | `![alt](file.png){style="width:60mm"}` |
 | Short list after a heading stays on one page | automatic (`h2 + ul` is `break-inside: avoid`) |
 | A paragraph before a code block or lone image stays on its page with it | automatic (`p.lead`); add `{.lead}` on the line above to force it |
+| Generated QR code in the text | `![alt](qr:https://orionrobots.co.uk/dojo/led){style="width:36mm"}` |
 | Reusable snippet | `{{> warn-stand}}` includes `snippets/warn-stand.md` (`{{> name key=value}}` fills `{{key}}`) |
 
 Code layout: `config.py` paths, `fonts.py`, `emojis.py`, `code.py` (highlighting), `robot_diagram.py` (SVG

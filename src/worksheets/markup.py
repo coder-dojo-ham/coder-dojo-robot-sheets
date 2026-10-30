@@ -8,6 +8,7 @@ from mdit_py_plugins.front_matter import front_matter_plugin
 
 from .code import render_code
 from .config import SNIPPETS, asset
+from .page import qr_svg
 from .robot_diagram import render_robot
 
 INCLUDE = re.compile(r"^\{\{>\s*([\w-]+)((?:\s+\w+=\S+)*)\s*\}\}\s*$", re.MULTILINE)
@@ -44,6 +45,9 @@ def _fence_renderer(md):
 def _render_image(self, tokens, idx, options, env):
     token = tokens[idx]
     src = token.attrGet("src")
+    if src.startswith("qr:"):  # ![alt](qr:https://...){style="width:30mm"}: a generated vector QR, sized by the style
+        style = token.attrGet("style") or "width:30mm"
+        return f'<span class="qr-inline" role="img" aria-label="{token.content}" style="{style}">{qr_svg(src[3:])}</span>'
     if not src.startswith(("http", "file:", "/")):
         src = asset(src).as_uri()
     token.attrSet("src", src)
