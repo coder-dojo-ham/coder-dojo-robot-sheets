@@ -17,7 +17,7 @@ We recommend you have done the Obstacle avoiding sheet first.
 
 Here’s what we’ll do:
 
-1. **Stop when ready**: we can start with a robot that stops when it’s a distance away from an object.
+1. **Stop before we hit**: we revisit the robot that stops when it’s a distance away from an object.
 2. **Close the gap**: we’ll get the robot to quickly drive to close a gap.
 3. **Keeping pace**: Follow a moving object without bunny hopping
 4. **Calm it down**: Tame it so it does jump when let go
@@ -25,11 +25,11 @@ Here’s what we’ll do:
 
 Let's make a robot puppy dog!
 
-## Step 1 - Stop when ready!
+## Step 1 - Stop before we hit!
 
-The robot has a pair of distance sensors. Let’s make the robot stop when they are too close to an object.
+This is the code from Step 2 of the Avoiding obstacles sheet: the robot has a pair of distance sensors, and stops when they are too close to an object. Let’s revisit it, as we’re going to build on it.
 
-```python {note="1|import|Import the sensor and motor<br>moving libraries;6|left_sensor|Set up the sensors;8|THRESHOLD|Set the motor speed and<br>stopping threshold;11|try|Use try/finally to ensure it<br>stops, even with errors;18|left_distance|Get the sensor data;22|if|If we are too close;25|break|Then break out of the loop;28|stop_all|Stop motors when we leave<br>the loop for any reason"}
+```python {note="8|THRESHOLD|Set the motor speed and<br>stopping threshold;22|if|If we are too close"}
 import time
 from hcsr04 import HCSR04
 import motors
