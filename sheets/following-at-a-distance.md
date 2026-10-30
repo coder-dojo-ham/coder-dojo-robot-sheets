@@ -82,7 +82,7 @@ This makes a `Controller` class and a `SET_POINT` instead of a threshold. This i
 
 Let’s make the rest of the code use it - update the numbered lines:
 
-```python {note="1|try|Use try/finally to ensure it<br>stops, even with errors;7|left_distance|Get the sensor data;11|left_gap|Get the gap between where we are<br>and the set point;15|left_speed|Use the gap to get a speed<br>for each motor;19|set_speed|Set the motor speeds;23|stop_all|Stop the motors here when we leave<br>the loop for any reason"}
+```python {note="11|left_gap|Get the gap<br>between where<br>we are and<br>the set point;15|left_speed|Use the gap to<br>get a speed for<br>each motor;19|set_speed|Set the motor<br>speeds"}
 try:
     left_controller = Controller()
     right_controller = Controller()
@@ -117,7 +117,7 @@ Our motor control goes between 1 and -1, we usually want smaller speeds than all
 If you walk, it will jump to follow, but it isn’t keeping pace. We can add an **integral** so it can correct for small constant changes like someone walking away from it.\
 **Replace only** the Controller section with this (the other code stays the same):
 
-```python {note="2|TIME_STEP|We add a TIME_STEP setting so all<br>code uses the same timing;6|i_factor|We add an i factor - controlling how<br>much influence the integral has<br>on the result.;8|integral|The integral adds up gaps over time;11|TIME_STEP|Calculate the gap multiplied<br>by passed time;13|i_factor|Then multiply by the i_factor and<br>add to the control response."}
+```python {note="2|TIME_STEP|We add a TIME_STEP setting so all<br>code uses the same timing;6|i_factor|We add an i factor - controlling how<br>much influence the integral has<br>on the result.;8|integral|_1.3The integral adds up gaps over time;11|TIME_STEP|Calculate the gap multiplied<br>by passed time;13|i_factor|Then multiply by the i_factor and<br>add to the control response."}
 SET_POINT = 10
 TIME_STEP = 0.1
 
@@ -169,7 +169,7 @@ By now, your robot should be able to follow an object by speeding up when it is 
 
 But even a good follower can still be a bit clumsy. **Replace only** the Controller section with this (the other code stays the same):
 
-```python {note="3|i_factor|We now have an integral and i factor.<br>The integral grows as an error remains.<br>A limit stops it growing out of control.;7|last_time|The integral adds up error over time;17|time_change|We add the gap multiplied by passed time;20|if|Apply limits so it isn’t out of control;23|i_factor|Then multiply by the i_factor and add<br>to the control response."}
+```python {note="3|i_factor|_0.5We now have an integral<br>and i factor. The integral<br>grows as an error remains.<br>A limit stops it growing<br>out of control.;7|last_time|_1.6The integral adds up<br>error over time;18|time_change|_0.5We add the gap multiplied<br>by passed time;21|if|Apply limits so it<br>isn’t out of control;24|i_factor|Then multiply by the i_factor<br>and add to the control response."}
 class Controller:
     p_factor = 0.02
     i_factor = 0.001
@@ -180,7 +180,8 @@ class Controller:
 
     def get_time_change(self):
         current_time = time.ticks_ms()
-        time_change = time.ticks_diff(self.last_time, current_time) / 1000
+        time_change = time.ticks_diff(
+            self.last_time, current_time) / 1000
         self.last_time = current_time
         return time_change
 
