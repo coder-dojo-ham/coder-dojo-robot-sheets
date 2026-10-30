@@ -22,6 +22,7 @@ Copy the built PDFs to the shared CoderDojo KU Google Drive `Worksheets/` folder
 cp .env.example .env        # once per machine; set GDRIVE_WORKSHEETS_DIR (git-ignored)
 uv run publish-sheets       # mounted path, or a Windows G:\... path via powershell.exe on WSL
 uv run publish-sheets connecting-thonny   # only the named sheets (others may hold unreviewed local changes)
+                           # sheets with `draft: true` in their front matter are never published (bare run skips them, naming one is an error)
 ```
 
 In VS Code (Ctrl+Shift+P > Tasks: Run Task; the default build task is Ctrl+Shift+B), `.vscode/tasks.json` has:

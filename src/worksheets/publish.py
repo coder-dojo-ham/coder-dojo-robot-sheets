@@ -6,6 +6,8 @@ mounted on the Windows side, a Windows path such as G:\\My Drive\\...: those go 
 Copying is idempotent: existing files are overwritten with the same content.
 With sheet names as arguments (`publish-sheets connecting-thonny`) only those PDFs are copied, so a sheet
 can go out without re-publishing others that have local changes nobody has reviewed yet.
+Sheets with `draft: true` in their front matter are never published: a bare run skips them, and naming
+one is an error (remove the flag when the sheet is ready).
 """
 import os
 import re
@@ -14,6 +16,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+import yaml
+
+from .build import FRONT_MATTER
 from .config import OUTPUT, REPO
 
 ENV_VAR = "GDRIVE_WORKSHEETS_DIR"
@@ -61,9 +66,22 @@ def copy_via_powershell(pdfs, dest):
     subprocess.run(["powershell.exe", "-NoProfile", "-Command", script], check=True, cwd="/mnt/c")
 
 
+def is_draft(name):
+    """True when sheets/<name>.md has `draft: true`; a PDF with no source sheet counts as published."""
+    sheet = REPO / "sheets" / f"{name}.md"
+    if not sheet.exists():
+        return False
+    match = FRONT_MATTER.match(sheet.read_text())
+    return bool(match and yaml.safe_load(match.group(1)).get("draft"))
+
+
 def main():
     names = sys.argv[1:]
+    drafts = [name for name in names if is_draft(name)]
+    if drafts:
+        sys.exit(f"{', '.join(drafts)} is a draft (draft: true in its front matter): not publishing")
     pdfs = [OUTPUT / f"{name}.pdf" for name in names] if names else sorted(OUTPUT.glob("*.pdf"))
+    pdfs = [pdf for pdf in pdfs if not is_draft(pdf.stem)]
     missing = [p for p in pdfs if not p.exists()]
     if missing or not pdfs:
         sys.exit(f"no PDF for {', '.join(p.name for p in missing) or 'anything'} in {OUTPUT}; run build-sheet first")
