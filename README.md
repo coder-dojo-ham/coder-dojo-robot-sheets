@@ -52,7 +52,7 @@ on the line above a heading to keep it flowing, or `{.newpage}` to start any oth
 | REPL session (Thonny-style `>>>`) | ` ```pycon ` fence |
 | Error text in red | ` ```text {tone="error"} ` |
 | Tint changed lines | ` ```python {hl="2,3"} ` |
-| Tint just one token (no callout) | ` ```python {tok="1\|TIME_STEP"} ` (`line\|token`, `;`-separated) |
+| Box just one token (no callout) | ` ```python {tok="1\|TIME_STEP"} ` (`line\|token`, `;`-separated) |
 | Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated; a line may have several); join tokens with `&` (`Pin&IN`); label prefix `^` grows it upward, `^N`/`_N` moves it N lines up/down with an angled leader |
 | Tip / warning box | `::: tip` / `::: warning` ... `:::` |
 | Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` puts the figure on the right; used in What is an LED) |

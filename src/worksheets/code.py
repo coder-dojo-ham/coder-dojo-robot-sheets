@@ -7,7 +7,7 @@ Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **
         join tokens with '&' to box several on one line (e.g. "Pin&IN"); start the label with '^'
         to grow it upwards, so it can sit beside a blank line instead of colliding with the next label.
         '^N' / '_N' also moves the label N lines up / down, angling its leader to reach it
-  tok   ';'-separated "line|token": tints just that token (same yellow as hl), with no callout
+  tok   ';'-separated "line|token": boxes just that token like a callout token does, with no callout
   tone  "error" prints the block in red, like a Thonny traceback
 Use ```pycon for a REPL session: the `>>>` prompt is styled like Thonny's.
 """
@@ -65,7 +65,7 @@ def _split_lines(code, lang):
 
 
 def _mark(runs, token, flag="mark"):
-    """Split runs so `token` is its own run flagged (`mark` = callout box, `tok` = tint). Returns True if found."""
+    """Split runs so `token` is its own run flagged (`mark` = callout box, `tok` = plain box). Returns True if found."""
     text = "".join(t for _, t in runs)
     start = text.find(token)
     if start < 0:
