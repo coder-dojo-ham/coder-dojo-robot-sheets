@@ -60,16 +60,16 @@ finally:
     motors.stop_all()
 ```
 
-Try running this. When the robot is closer than 30cm from the target, it should stop. Try changing this for different thresholds.
+Try running this. When the robot is closer than 30cm from the target, it should stop. If you move the object, you’ll need to run the code again to see the robot move. The reset button will work if you save it to the robot as main.py.
 
-If you move the object, you’ll need to run the code again to see the robot move.
+Try changing this for different thresholds.
 
 ## Step 2 - Close the gap!
 
-We can make the robot try to keep a gap between itself and an object in front. Add this code:
+We can make the robot try to keep a gap between itself and an object in front. Add this code below `SPEED` and above `try`:
 
 ```python {note="1|SET_POINT|Aim for this distance - a set point;4|p_factor|^0.6The p_factor setting controls<br>how strongly it responds.;6|calculate|The controller responds proportionally<br>to a gap. A greater gap means a<br>greater response"}
-SET_POINT = 10
+SET_POINT = 30
 
 class Controller:
     p_factor = 0.03
@@ -78,9 +78,9 @@ class Controller:
         return gap * self.p_factor
 ```
 
-This makes a `Controller` class and a `SET_POINT` instead of a threshold. This is a bit closer at 10cm.
+This makes a `Controller` class and a `SET_POINT` instead of a threshold.
 
-This is **proportional** control: the bigger the gap, the bigger the response. Let’s make the rest of the code use it:
+This is **proportional** control: the bigger the gap, the bigger the response. Let’s make the rest of the code use it. Swap out the whole try section:
 
 ```python {note="11|left_gap|Get the gap<br>between where<br>we are and<br>the set point;15|left_speed|Use the gap to<br>get a speed for<br>each motor;19|set_speed|Set the motor<br>speeds"}
 try:
@@ -112,14 +112,13 @@ When you run this, the robot should try to get about 30 cm from something held i
 
 Our motor control goes between 1 and -1, we usually want smaller speeds than all the way, and at less than 10cm we should slow down. So 1/10 or 0.1 is a reasonable maximum. But much lower makes it a smoother response.
 
-{.nobreak}
 ## Step 3 - Keeping pace!
 
 If you walk, it will jump to follow, but it isn’t keeping pace. We can add an **integral** so it can correct for small constant changes like someone walking away from it.\
 **Replace only** the Controller section with this (the other code stays the same):
 
 ```python {note="2|TIME_STEP|We add a TIME_STEP setting so all<br>code uses the same timing;6|i_factor|We add an i factor - controlling how<br>much influence the integral has<br>on the result.;8|integral|_1.3The integral adds up gaps over time;11|TIME_STEP|Calculate the gap multiplied<br>by passed time;13|i_factor|Then multiply by the i_factor and<br>add to the control response."}
-SET_POINT = 10
+SET_POINT = 30
 TIME_STEP = 0.1
 
 class Controller:
@@ -132,6 +131,12 @@ class Controller:
         self.integral += gap * TIME_STEP
         return (gap * self.p_factor +
             self.integral * self.i_factor)
+```
+
+Locate the time.sleep, and ensure this also uses the time step:
+
+```python {hl="1"}
+        time.sleep(TIME_STEP)
 ```
 
 If you send the updated code to the robot, you should find that you can walk with the robot following behind you. Your shoes and trousers may be hard for the sensors to read, so holding a barrier or something rigid and moving that may work better.
@@ -203,5 +208,6 @@ class Controller:
 
 ## What else could you add?
 
-&lt;Ideas to extend the project, in increasing complexity&gt;\
-&lt;Maybe where to get reference material to help&gt;
+Printing these values in a "P: <value>, I: <value>" format can help you tune the controller, triggering the graph updates in the plotter for better visualization.
+
+How well tuned can you get it before it starts to overshoot or become unstable?
