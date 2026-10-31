@@ -222,6 +222,8 @@ class Controller:
         return (gap * self.p_factor +
             self.integral * self.i_factor)
 ```
+    
+Now, if you let the robot build up an integral error, it will not grow out of control thanks to the `i_limit`. Try this code with the same test.
 
 ## Step 5 - Adding brakes!
 
@@ -259,6 +261,74 @@ class Controller:
 - start with a very small `d_factor`
 - if the robot gets twitchy, reduce `d_factor`
 - if it still feels clumsy or overshoots, try increasing it a little
+
+## Checkpoint - the finished code ✅
+
+Here is the whole program with the smoother controller, to check against what is on your robot:
+
+```python {size="9.5"}
+import time
+from hcsr04 import HCSR04
+import motors
+
+right_sensor = HCSR04(trigger_pin=0, echo_pin=1)
+left_sensor = HCSR04(trigger_pin=7, echo_pin=28)
+
+THRESHOLD = 30
+SPEED = 0.7
+
+SET_POINT = 30
+TIME_STEP = 0.1
+
+class Controller:
+    p_factor = 0.02
+    i_factor = 0.001
+    i_limit = 50
+
+    integral = 0
+    last_time = time.ticks_ms()
+
+    def get_time_change(self):
+        current_time = time.ticks_ms()
+        time_change = time.ticks_diff(
+            self.last_time, current_time) / 1000
+        self.last_time = current_time
+        return time_change
+
+    def calculate(self, gap):
+        time_change = self.get_time_change()
+        self.integral += gap * time_change
+        if self.integral > self.i_limit:
+            self.integral = self.i_limit
+        if self.integral < -self.i_limit:
+            self.integral = - self.i_limit
+        return gap * self.p_factor + \
+                self.integral * self.i_factor
+
+try:
+    left_controller = Controller()
+    right_controller = Controller()
+
+    while True:
+        # Sense
+        left_distance = left_sensor.distance_cm()
+        right_distance = right_sensor.distance_cm()
+
+        # Think
+        left_gap = left_distance - SET_POINT
+        right_gap = right_distance - SET_POINT
+        print(left_gap, right_gap)
+
+        left_speed = left_controller.calculate(left_gap)
+        right_speed = right_controller.calculate(right_gap)
+
+        # act
+        motors.set_speed(motors.left, left_speed)
+        motors.set_speed(motors.right, right_speed)
+        time.sleep(TIME_STEP)
+finally:
+    motors.stop_all()
+```
 
 ## What else could you add?
 
