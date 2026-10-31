@@ -149,7 +149,7 @@ If it’s failing to stop when you stop or slow when you slow, reduce the `i_lim
 
 Here is the whole program with the proportional and integral controller, to check against what is on your robot:
 
-```python {size="11"}
+```python
 import time
 from hcsr04 import HCSR04
 import motors
@@ -174,6 +174,9 @@ class Controller:
         return (gap * self.p_factor +
             self.integral * self.i_factor)
 
+```
+
+```python
 try:
     left_controller = Controller()
     right_controller = Controller()
@@ -266,7 +269,7 @@ class Controller:
 
 Here is the whole program with the smoother controller, to check against what is on your robot:
 
-```python {size="9.5"}
+```python
 import time
 from hcsr04 import HCSR04
 import motors
@@ -305,6 +308,9 @@ class Controller:
         return gap * self.p_factor + \
                 self.integral * self.i_factor
 
+```
+
+```python
 try:
     left_controller = Controller()
     right_controller = Controller()
@@ -332,6 +338,6 @@ finally:
 
 ## What else could you add?
 
-Printing these values in a "P: <value>, I: <value>" format can help you tune the controller, triggering the graph updates in the plotter for better visualization.
+Printing these values in a "P: &lt;value&gt;, I: &lt;value&gt;" format can help you tune the controller, triggering the graph updates in the plotter for better visualization.
 
 How well tuned can you get it before it starts to overshoot or become unstable?
