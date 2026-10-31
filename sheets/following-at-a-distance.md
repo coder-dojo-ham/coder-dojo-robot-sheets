@@ -68,7 +68,7 @@ If you move the object, you’ll need to run the code again to see the robot mov
 
 We can make the robot try to keep a gap between itself and an object in front. Add this code:
 
-```python {note="1|SET_POINT|Aim for this distance - a set point;4|p_factor|The p_factor setting controls<br>how strongly it responds.;6|calculate|The controller responds proportionally<br>to a gap. A greater gap means a<br>greater response"}
+```python {note="1|SET_POINT|Aim for this distance - a set point;4|p_factor|The p_factor setting controls<br>how strongly it responds.;6|calculate|_1.3The controller responds proportionally<br>to a gap. A greater gap means a<br>greater response"}
 SET_POINT = 10
 
 class Controller:
