@@ -8,6 +8,7 @@ Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **
         to grow it upwards, so it can sit beside a blank line instead of colliding with the next label.
         '^N' / '_N' also moves the label N lines up / down, angling its leader to reach it
   tok   ';'-separated "line|token": boxes just that token like a callout token does, with no callout
+  size  font size in pt, for a long listing that must fit one page (default 13; callouts assume the default)
   tone  "error" prints the block in red, like a Thonny traceback
 Use ```pycon for a REPL session: the `>>>` prompt is styled like Thonny's.
 """
@@ -157,7 +158,10 @@ def render_code(code, lang, info="", inline=lambda s: s):
     # a label with <br> runs below its line; reserve that room so it can't hit what follows
     spill = max((no + label.count("<br>") + math.ceil(max(_split_label(label)[2], 0) / LINE_PT) - len(lines)
                  for no, labels in notes.items() for label in labels if not _split_label(label)[1]), default=0)
-    style = f' style="margin-bottom:calc(4mm + {spill * FONT_PT * 1.12:.1f}pt)"' if spill > 0 else ""
+    styles = [f"margin-bottom:calc(4mm + {spill * FONT_PT * 1.12:.1f}pt)"] if spill > 0 else []
+    if "size" in attrs:
+        styles.append(f"font-size:{float(attrs['size']):g}pt")
+    style = f' style="{";".join(styles)}"' if styles else ""
     if attrs.get("tone") == "error":
         cls += " err"
     return f'<div class="{cls}"{style}>{"".join(rows)}</div>\n'

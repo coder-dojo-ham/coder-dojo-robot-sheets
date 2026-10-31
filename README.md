@@ -51,6 +51,7 @@ on the line above a heading to keep it flowing, or `{.newpage}` to start any oth
 | Code, coloured keywords | ` ```python ` fence |
 | REPL session (Thonny-style `>>>`) | ` ```pycon ` fence |
 | Error text in red | ` ```text {tone="error"} ` |
+| Smaller font for a long listing (one page) | ` ```python {size="10.5"} ` (not with callouts) |
 | Tint changed lines | ` ```python {hl="2,3"} ` |
 | Box just one token (no callout) | ` ```python {tok="1\|TIME_STEP"} ` (`line\|token`, `;`-separated) |
 | Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated; a line may have several); join tokens with `&` (`Pin&IN`); label prefix `^` grows it upward, `^N`/`_N` moves it N lines up/down with an angled leader |

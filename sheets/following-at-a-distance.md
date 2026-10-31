@@ -145,6 +145,60 @@ If it’s still hopping, adjust the `i_factor` up a bit, but don’t let it get 
 
 If it’s failing to stop when you stop or slow when you slow, reduce the `i_limit`, the integral can get very high and be stuck there for a while
 
+## Checkpoint - all the code so far ✅
+
+Here is the whole program with the proportional and integral controller, to check against what is on your robot:
+
+```python {size="11"}
+import time
+from hcsr04 import HCSR04
+import motors
+
+right_sensor = HCSR04(trigger_pin=0, echo_pin=1)
+left_sensor = HCSR04(trigger_pin=7, echo_pin=28)
+
+THRESHOLD = 30
+SPEED = 0.7
+
+SET_POINT = 30
+TIME_STEP = 0.1
+
+class Controller:
+    p_factor = 0.03
+    i_factor = 0.001
+
+    integral = 0
+
+    def calculate(self, gap):
+        self.integral += gap * TIME_STEP
+        return (gap * self.p_factor +
+            self.integral * self.i_factor)
+
+try:
+    left_controller = Controller()
+    right_controller = Controller()
+
+    while True:
+        # Sense
+        left_distance = left_sensor.distance_cm()
+        right_distance = right_sensor.distance_cm()
+
+        # Think
+        left_gap = left_distance - SET_POINT
+        right_gap = right_distance - SET_POINT
+        print(left_gap, right_gap)
+
+        left_speed = left_controller.calculate(left_gap)
+        right_speed = right_controller.calculate(right_gap)
+
+        # act
+        motors.set_speed(motors.left, left_speed)
+        motors.set_speed(motors.right, right_speed)
+        time.sleep(TIME_STEP)
+finally:
+    motors.stop_all()
+```
+
 ## Step 4 - Calm it down!
 
 Try this, start your robot a little further than the distance, and hold it, watch the wheels get fast. Now let it go and it will drive really quickly, and probably crash (careful!)
