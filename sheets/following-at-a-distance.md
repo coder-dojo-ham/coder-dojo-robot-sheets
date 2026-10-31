@@ -68,7 +68,7 @@ If you move the object, you’ll need to run the code again to see the robot mov
 
 We can make the robot try to keep a gap between itself and an object in front. Add this code:
 
-```python {note="1|SET_POINT|Aim for this distance - a set point;4|p_factor|The p_factor setting controls<br>how strongly it responds.;6|calculate|_1.3The controller responds proportionally<br>to a gap. A greater gap means a<br>greater response"}
+```python {note="1|SET_POINT|Aim for this distance - a set point;4|p_factor|^0.6The p_factor setting controls<br>how strongly it responds.;6|calculate|The controller responds proportionally<br>to a gap. A greater gap means a<br>greater response"}
 SET_POINT = 10
 
 class Controller:
@@ -80,9 +80,7 @@ class Controller:
 
 This makes a `Controller` class and a `SET_POINT` instead of a threshold. This is a bit closer at 10cm.
 
-This is **proportional** control: the bigger the gap, the bigger the response.
-
-Let’s make the rest of the code use it - update the numbered lines:
+This is **proportional** control: the bigger the gap, the bigger the response. Let’s make the rest of the code use it:
 
 ```python {note="11|left_gap|Get the gap<br>between where<br>we are and<br>the set point;15|left_speed|Use the gap to<br>get a speed for<br>each motor;19|set_speed|Set the motor<br>speeds"}
 try:
