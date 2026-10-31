@@ -135,7 +135,7 @@ class Controller:
 
 Locate the time.sleep, and ensure this also uses the time step:
 
-```python {hl="1"}
+```python {tok="1|TIME_STEP"}
         time.sleep(TIME_STEP)
 ```
 
