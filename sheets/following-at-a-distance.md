@@ -6,7 +6,7 @@ language: MicroPython
 requires: Laptop with Python, Thonny and a Robot kit
 version: "0.2"
 link: https://orionrobots.co.uk/dojo/follow  # planned short link, no site rule yet
-hero: [hero-placeholder-1.png, hero-placeholder-2.png]  # the source doc's cover images (fireworks, from its template): replace
+hero: [hero-robot-following-feet.jpg, hero-robot-sensors-front.jpg]
 ---
 Use distance sensors to follow an object like a puppy!
 
