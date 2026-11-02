@@ -1,6 +1,5 @@
 ---
 title: Following at a distance
-draft: true  # work in progress: built locally, never copied to the shared drive by publish-sheets
 difficulty: 5
 language: MicroPython
 requires: Laptop with Python, Thonny and a Robot kit
