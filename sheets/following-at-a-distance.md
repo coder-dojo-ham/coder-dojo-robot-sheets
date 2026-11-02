@@ -75,12 +75,12 @@ class Controller:
     p_factor = 0.03
 
     def calculate(self, gap):
-        return gap * self.p_factor
+        # P term
+        p = gap * self.p_factor
+        return p
 ```
 
-This makes a `Controller` class and a `SET_POINT` instead of a threshold.
-
-This is **proportional** control: the bigger the gap, the bigger the response. Let’s make the rest of the code use it. Swap out the whole try section:
+This makes a `Controller` class and a `SET_POINT` instead of a threshold. This is **proportional** control: the bigger the gap, the bigger the response. Let’s make the rest of the code use it. Swap out the whole try section:
 
 ```python {note="11|left_gap|Get the gap<br>between where<br>we are and<br>the set point;15|left_speed|Use the gap to<br>get a speed for<br>each motor;19|set_speed|Set the motor<br>speeds"}
 try:
@@ -117,7 +117,7 @@ Our motor control goes between 1 and -1, we usually want smaller speeds than all
 If you walk, it will jump to follow, but it isn’t keeping pace. We can add an **integral** so it can correct for small constant changes like someone walking away from it.\
 **Replace only** the Controller section with this (the other code stays the same):
 
-```python {note="2|TIME_STEP|We add a TIME_STEP setting so all<br>code uses the same timing;6|i_factor|We add an i factor - controlling how<br>much influence the integral has<br>on the result.;8|integral|_1.3The integral adds up gaps over time;11|TIME_STEP|Calculate the gap multiplied<br>by passed time;13|i_factor|Then multiply by the i_factor and<br>add to the control response."}
+```python {note="2|TIME_STEP|We add a TIME_STEP setting so all<br>code uses the same timing;6|i_factor|We add an i factor - controlling how<br>much influence the integral has<br>on the result.;8|integral|_1.3The integral adds up gaps over time;15|TIME_STEP|^Calculate the gap multiplied<br>by passed time;16|i_factor|Then multiply by<br>the i_factor"}
 SET_POINT = 30
 TIME_STEP = 0.1
 
@@ -128,9 +128,14 @@ class Controller:
     integral = 0
 
     def calculate(self, gap):
+        # P term
+        p = gap * self.p_factor
+
+        # I term
         self.integral += gap * TIME_STEP
-        return (gap * self.p_factor +
-            self.integral * self.i_factor)
+        i = self.integral * self.i_factor
+
+        return p + i
 ```
 
 Locate the time.sleep, and ensure this also uses the time step:
@@ -167,9 +172,14 @@ class Controller:
     integral = 0
 
     def calculate(self, gap):
+        # P term
+        p = gap * self.p_factor
+
+        # I term
         self.integral += gap * TIME_STEP
-        return (gap * self.p_factor +
-            self.integral * self.i_factor)
+        i = self.integral * self.i_factor
+
+        return p + i
 
 ```
 
@@ -205,22 +215,28 @@ Try this, start your robot a little further than the distance, and hold it, watc
 
 We need to make sure that integral can’t get too excited!
 
-```python {note="4|i_limit|A limit stops it growing out of control;11|i_limit|Apply limits so it isn’t out of control"}
+```python {note="5|i_limit|A limit stops it growing out of control;15|i_limit|Apply limits so it isn’t out of control"}
 class Controller:
     p_factor = 0.02
     i_factor = 0.001
+
     i_limit = 50
 
     integral = 0
 
     def calculate(self, gap):
+        # P term
+        p = gap * self.p_factor
+
+        # I term
         self.integral += gap * TIME_STEP
         if self.integral > self.i_limit:
             self.integral = self.i_limit
         elif self.integral < -self.i_limit:
             self.integral = -self.i_limit
-        return (gap * self.p_factor +
-            self.integral * self.i_factor)
+        i = self.integral * self.i_factor
+
+        return p + i
 ```
     
 Now, if you let the robot build up an integral error, it will not grow out of control thanks to the `i_limit`. Try this code with the same test.
@@ -241,7 +257,7 @@ class Controller:
     last_gap = None
 
     def calculate(self, gap):
-        # P Term
+        # P term
         p = gap * self.p_factor
 
         # I term
@@ -296,7 +312,7 @@ class Controller:
     last_gap = None
 
     def calculate(self, gap):
-        # P Term
+        # P term
         p = gap * self.p_factor
 
         # I term
