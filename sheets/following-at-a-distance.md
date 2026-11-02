@@ -147,7 +147,7 @@ If it’s failing to stop when you stop or slow when you slow, reduce the `i_lim
 
 ## Checkpoint - all the code so far ✅
 
-Here is the whole program with the proportional and integral controller, to check against what is on your robot:
+Here is the whole program with the proportional and integral controller, to check against what is on your robot. `THRESHOLD` and `SPEED` aren’t used any more, so they are left out.
 
 ```python
 import time
@@ -156,9 +156,6 @@ import motors
 
 right_sensor = HCSR04(trigger_pin=0, echo_pin=1)
 left_sensor = HCSR04(trigger_pin=7, echo_pin=28)
-
-THRESHOLD = 30
-SPEED = 0.7
 
 SET_POINT = 30
 TIME_STEP = 0.1
@@ -230,44 +227,52 @@ Now, if you let the robot build up an integral error, it will not grow out of co
 
 ## Step 5 - Adding brakes!
 
-By now, your robot should be able to follow an object by speeding up when it is too far away and slowing down when it gets closer.
+By now, your robot should be able to follow an object by speeding up when it is too far away and slowing down when it gets closer. But even a good follower can be clumsy: if the object stops suddenly, or jumps away, the robot lurches after it. Let’s give it some brakes. We will make it notice **how quickly the gap is changing** and react to sudden changes, dampening its response to spikes and drops in the gap. **Replace only** the Controller section with this (the other code stays the same):
 
-But even a good follower can still be a bit clumsy. **Replace only** the Controller section with this (the other code stays the same):
-
-```python {note="3|i_factor|_0.5We now have an integral<br>and i factor. The integral<br>grows as an error remains.<br>A limit stops it growing<br>out of control.;7|last_time|_1.6The integral adds up<br>error over time;18|time_change|_0.5We add the gap multiplied<br>by passed time;21|if|Apply limits so it<br>isn’t out of control;24|i_factor|Then multiply by the i_factor<br>and add to the control response."}
+```python {note="4|d_factor|How strong the<br>brakes are;9|last_gap|Remember the<br>gap from last time<br>round the loop;27|gap_rate|How fast the gap<br>is changing;30|d_factor|Scale it by the<br>d_factor"}
 class Controller:
     p_factor = 0.02
     i_factor = 0.001
+    d_factor = 0.01
+
     i_limit = 50
 
     integral = 0
-    last_time = time.ticks_ms()
-
-    def get_time_change(self):
-        current_time = time.ticks_ms()
-        time_change = time.ticks_diff(
-            self.last_time, current_time) / 1000
-        self.last_time = current_time
-        return time_change
+    last_gap = None
 
     def calculate(self, gap):
-        time_change = self.get_time_change()
-        self.integral += gap * time_change
+        # P Term
+        p = gap * self.p_factor
+
+        # I term
+        self.integral += gap * TIME_STEP
         if self.integral > self.i_limit:
             self.integral = self.i_limit
-        if self.integral < -self.i_limit:
-            self.integral = - self.i_limit
-        return gap * self.p_factor + \
-                self.integral * self.i_factor
+        elif self.integral < -self.i_limit:
+            self.integral = -self.i_limit
+        i = self.integral * self.i_factor
+
+        # D term
+        if self.last_gap is None:
+            gap_rate = 0
+        else:
+            gap_rate = (gap - self.last_gap) / TIME_STEP
+
+        self.last_gap = gap
+        d = gap_rate * self.d_factor
+
+        return (p +
+            i +
+            d)
 ```
 
-- start with a very small `d_factor`
-- if the robot gets twitchy, reduce `d_factor`
-- if it still feels clumsy or overshoots, try increasing it a little
+The new part looks at how much the gap changed since the last time round the loop. A big, sudden change makes the brakes bite hard; a slow change barely touches them. Start with a very small `d_factor`: reduce it if the robot gets twitchy, and increase it a little if it still overshoots.
+
+**Aside:** the maths name for “how fast something is changing” is the derivative, hence the D. P, I and D together make a PID controller.
 
 ## Checkpoint - the finished code ✅
 
-Here is the whole program with the smoother controller, to check against what is on your robot:
+Here is the whole program with the smoother controller, to check against what is on your robot. `THRESHOLD` and `SPEED` aren’t used any more, so they are left out.
 
 ```python
 import time
@@ -277,37 +282,43 @@ import motors
 right_sensor = HCSR04(trigger_pin=0, echo_pin=1)
 left_sensor = HCSR04(trigger_pin=7, echo_pin=28)
 
-THRESHOLD = 30
-SPEED = 0.7
-
 SET_POINT = 30
 TIME_STEP = 0.1
 
 class Controller:
     p_factor = 0.02
     i_factor = 0.001
+    d_factor = 0.01
+
     i_limit = 50
 
     integral = 0
-    last_time = time.ticks_ms()
-
-    def get_time_change(self):
-        current_time = time.ticks_ms()
-        time_change = time.ticks_diff(
-            self.last_time, current_time) / 1000
-        self.last_time = current_time
-        return time_change
+    last_gap = None
 
     def calculate(self, gap):
-        time_change = self.get_time_change()
-        self.integral += gap * time_change
+        # P Term
+        p = gap * self.p_factor
+
+        # I term
+        self.integral += gap * TIME_STEP
         if self.integral > self.i_limit:
             self.integral = self.i_limit
-        if self.integral < -self.i_limit:
-            self.integral = - self.i_limit
-        return gap * self.p_factor + \
-                self.integral * self.i_factor
+        elif self.integral < -self.i_limit:
+            self.integral = -self.i_limit
+        i = self.integral * self.i_factor
 
+        # D term
+        if self.last_gap is None:
+            gap_rate = 0
+        else:
+            gap_rate = (gap - self.last_gap) / TIME_STEP
+
+        self.last_gap = gap
+        d = gap_rate * self.d_factor
+
+        return (p +
+            i +
+            d)
 ```
 
 ```python
