@@ -22,6 +22,7 @@ Copy the built PDFs to the shared CoderDojo KU Google Drive `Worksheets/` folder
 cp .env.example .env        # once per machine; set GDRIVE_WORKSHEETS_DIR (git-ignored)
 uv run publish-sheets       # mounted path, or a Windows G:\... path via powershell.exe on WSL
 uv run publish-sheets connecting-thonny   # only the named sheets (others may hold unreviewed local changes)
+                           # sheets with `draft: true` in their front matter are never published (bare run skips them, naming one is an error)
 ```
 
 In VS Code (Ctrl+Shift+P > Tasks: Run Task; the default build task is Ctrl+Shift+B), `.vscode/tasks.json` has:
@@ -50,7 +51,9 @@ on the line above a heading to keep it flowing, or `{.newpage}` to start any oth
 | Code, coloured keywords | ` ```python ` fence |
 | REPL session (Thonny-style `>>>`) | ` ```pycon ` fence |
 | Error text in red | ` ```text {tone="error"} ` |
+| Smaller font for a long listing (one page) | ` ```python {size="10.5"} ` (not with callouts) |
 | Tint changed lines | ` ```python {hl="2,3"} ` |
+| Box just one token (no callout) | ` ```python {tok="1\|TIME_STEP"} ` (`line\|token`, `;`-separated) |
 | Callout label on a token | ` ```python {note="6\|-0.7\|Set to **-0.7**"} ` (`line\|token\|label`, `;`-separated; a line may have several); join tokens with `&` (`Pin&IN`); label prefix `^` grows it upward, `^N`/`_N` moves it N lines up/down with an angled leader |
 | Tip / warning box | `::: tip` / `::: warning` ... `:::` |
 | Figure beside text | `:::: side` containing `::: fig` and `::: text` (`side-right` puts the figure on the right; used in What is an LED) |

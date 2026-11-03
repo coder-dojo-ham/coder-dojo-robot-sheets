@@ -7,6 +7,8 @@ Fence attributes (all optional), e.g. ```python {hl="2,3" note="6|-0.7|Set to **
         join tokens with '&' to box several on one line (e.g. "Pin&IN"); start the label with '^'
         to grow it upwards, so it can sit beside a blank line instead of colliding with the next label.
         '^N' / '_N' also moves the label N lines up / down, angling its leader to reach it
+  tok   ';'-separated "line|token": boxes just that token like a callout token does, with no callout
+  size  font size in pt, for a long listing that must fit one page (default 13; callouts assume the default)
   tone  "error" prints the block in red, like a Thonny traceback
 Use ```pycon for a REPL session: the `>>>` prompt is styled like Thonny's.
 """
@@ -63,8 +65,8 @@ def _split_lines(code, lang):
     return lines
 
 
-def _mark(runs, token):
-    """Split runs so `token` is its own run flagged for boxing. Returns True if found."""
+def _mark(runs, token, flag="mark"):
+    """Split runs so `token` is its own run flagged (`mark` = callout box, `tok` = plain box). Returns True if found."""
     text = "".join(t for _, t in runs)
     start = text.find(token)
     if start < 0:
@@ -78,7 +80,7 @@ def _mark(runs, token):
             continue
         if a < start:
             out.append([cls, t[:start - a]])
-        out.append([cls + " mark", t[max(start, a) - a:min(end, b) - a]])
+        out.append([f"{cls} {flag}", t[max(start, a) - a:min(end, b) - a]])
         if b > end:
             out.append([cls, t[end - a:]])
     runs[:] = out
@@ -119,6 +121,10 @@ def render_code(code, lang, info="", inline=lambda s: s):
     attrs = parse_attrs(info)
     lines = _split_lines(code.rstrip("\n"), lang)
     hl = {int(n) for n in attrs.get("hl", "").split(",") if n.strip()}
+    for spec in filter(None, attrs.get("tok", "").split(";")):
+        no, token = spec.split("|", 1)
+        if not _mark(lines[int(no) - 1], token, "tok"):
+            raise ValueError(f"tok token {token!r} not on line {no}: {lines[int(no) - 1]}")
     notes = {}
     for spec in filter(None, attrs.get("note", "").split(";")):
         no, token, label = spec.split("|", 2)
@@ -152,7 +158,10 @@ def render_code(code, lang, info="", inline=lambda s: s):
     # a label with <br> runs below its line; reserve that room so it can't hit what follows
     spill = max((no + label.count("<br>") + math.ceil(max(_split_label(label)[2], 0) / LINE_PT) - len(lines)
                  for no, labels in notes.items() for label in labels if not _split_label(label)[1]), default=0)
-    style = f' style="margin-bottom:calc(4mm + {spill * FONT_PT * 1.12:.1f}pt)"' if spill > 0 else ""
+    styles = [f"margin-bottom:calc(4mm + {spill * FONT_PT * 1.12:.1f}pt)"] if spill > 0 else []
+    if "size" in attrs:
+        styles.append(f"font-size:{float(attrs['size']):g}pt")
+    style = f' style="{";".join(styles)}"' if styles else ""
     if attrs.get("tone") == "error":
         cls += " err"
     return f'<div class="{cls}"{style}>{"".join(rows)}</div>\n'
