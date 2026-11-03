@@ -4,7 +4,8 @@ difficulty: 5
 language: MicroPython
 requires: Laptop with Python, Thonny and a Robot kit
 version: "0.2"
-link: https://orionrobots.co.uk/dojo/follow  # planned short link, no site rule yet
+link: https://orionrobots.co.uk/dojo/follow
+pdf_link: https://drive.google.com/file/d/1K3fqU6woA3gFs1MXTkF_ryEfKV9I1vbD/view  # the published PDF in the shared drive
 hero: [hero-robot-following-feet.jpg, hero-robot-sensors-front.jpg]
 ---
 Use distance sensors to follow an object like a puppy!
